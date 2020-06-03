@@ -9,7 +9,10 @@
 
 function onGetResult(data)
 {
-    $("#json_out").text(JSON.stringify(data, null, 2));
+    const dqp = data.query.pages;
+    const links = dqp[Object.keys(dqp)[0]].links;
+    const titles = links.map(x => x.title);
+    $("#json_out").text(JSON.stringify(titles, null, 2));
 }
 
 function onGoClick()
