@@ -7,18 +7,24 @@
 
 <script>
 
-$(document).ready(function(){
+function onGetResult(data, status)
+{
+    $("#json_out").text(JSON.stringify(data));
+}
+
+function onGoClick()
+{
+    var pageTitle = encodeURIComponent($("#pagetitle").val());
+    var uri = 'https://en.wikipedia.org/w/api.php/w/api.php?action=query&prop=links&format=json&origin=*&titles=' 
+        + pageTitle;
+    $.get(uri, onGetResult);
     
-    function onGoClick(){
-        $("#output_ul").empty();
-        $("#output_ul").append("<li>World, hello!");
-    }
-    
+}
+
+$(document).ready(function()
+{    
     $("#gobutton").click(onGoClick);
-
 });
-
-
 
 </script>
 
@@ -30,9 +36,9 @@ $(document).ready(function(){
 <input type="button" id="gobutton" value="GO">
 
 <div id="output">
-    <ul id="output_ul">
-        <li>Hello, world!</li>
-    </ul>
+    <pre id="json_out">
+        NOTHING HERE
+    </pre>
 </div>
 
 </body>
