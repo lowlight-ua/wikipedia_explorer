@@ -30,16 +30,39 @@ class Graph
     }
 }
 
-let graph = new Graph();
+class Result
+{
+    constructor()
+    {
+        this.graph = new Graph();
+        this.operations = 0;
+    }
+
+    onStepComplete()
+    {
+        this.operations++;
+        if (this.operations == 2)
+        {
+            this.onOperationComplete();
+        }
+    }
+
+    onOperationComplete()
+    {
+        $("#json_out").append(JSON.stringify(this.graph, null, 2));
+    }
+}
 
 function onGetResultLinks(data, from)
 {
     const dqp = data.query.pages;
     const links = dqp[Object.keys(dqp)[0]].links;
     const titles = links.map(x => x.title);
-    // $("#json_out").append(JSON.stringify(titles, null, 2));
+
+    let graph = result.graph;
     titles.forEach(i => graph.addLink(from, i));
-    $("#json_out").append(JSON.stringify(graph, null, 2));
+
+    result.onStepComplete();
 }
 
 function onGetResultBacklinks(data, to)
@@ -47,14 +70,17 @@ function onGetResultBacklinks(data, to)
     const dqp = data.query.pages;
     const linkshere = dqp[Object.keys(dqp)[0]].linkshere;
     const titles = linkshere.map(x => x.title);
-    // $("#json_out").append(JSON.stringify(titles, null, 2));
+
+    let graph = result.graph;
     titles.forEach(i => graph.addLink(i, to));
-    $("#json_out").append(JSON.stringify(graph, null, 2));
+
+    result.onStepComplete();
 }
 
 function onGoClick()
 {
-    graph = new Graph(); 
+    result = new Result(); 
+    let graph = result.graph;
 
     let thePage = $("#pagetitle").val();
     if (thePage.length == 0)
