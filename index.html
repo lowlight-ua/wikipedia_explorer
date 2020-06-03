@@ -46,6 +46,30 @@ class Application
         this.operations = 0;
     }
 
+    onGetResultLinks(data)
+    {
+        const dqp = data.query.pages;
+        const links = dqp[Object.keys(dqp)[0]].links;
+        const titles = links.map(x => x.title);
+        let graph = this.graph;
+
+        titles.forEach(i => graph.addLink(graph.centerArticle, i));
+
+        this.onStepComplete();
+    }
+
+    onGetResultBacklinks(data)
+    {
+        const dqp = data.query.pages;
+        const linkshere = dqp[Object.keys(dqp)[0]].linkshere;
+        const titles = linkshere.map(x => x.title);
+        let graph = this.graph;
+
+        titles.forEach(i => graph.addLink(i, graph.centerArticle));
+
+        this.onStepComplete();
+    }
+
     onStepComplete()
     {
         this.operations++;
@@ -60,8 +84,9 @@ class Application
         // $("#json_out").append(JSON.stringify(this.graph, null, 2));        
 
         console.log(this.centerArticle);
-        const linksOut = this.graph.linksOut[this.centerArticle];
-        const linksIn  =  this.graph.linksIn[this.centerArticle];
+        let graph = this.graph;
+        const linksOut =  graph.linksOut[graph.centerArticle];
+        const linksIn  =  graph.linksIn[graph.centerArticle];
         for (var it = linksOut.values(), val= null; val=it.next().value; ) 
         {
             console.log("   " + val);
@@ -71,30 +96,6 @@ class Application
             }
         }
     }
-}
-
-function onGetResultLinks(data)
-{
-    const dqp = data.query.pages;
-    const links = dqp[Object.keys(dqp)[0]].links;
-    const titles = links.map(x => x.title);
-
-    let graph = appl.graph;
-    titles.forEach(i => graph.addLink(appl.centerArticle, i));
-
-    appl.onStepComplete();
-}
-
-function onGetResultBacklinks(data)
-{
-    const dqp = data.query.pages;
-    const linkshere = dqp[Object.keys(dqp)[0]].linkshere;
-    const titles = linkshere.map(x => x.title);
-
-    let graph = appl.graph;
-    titles.forEach(i => graph.addLink(i, appl.centerArticle));
-
-    appl.onStepComplete();
 }
 
 function onGoClick()
@@ -124,7 +125,7 @@ function onGoClick()
             withCredentials: false
         },
         dataType: 'json'
-    } ).done(function(data) { onGetResultLinks(data); });
+    } ).done(function(data) { appl.onGetResultLinks(data); });
 
     $.ajax( {
         url: 'https://en.wikipedia.org/w/api.php',
@@ -141,7 +142,7 @@ function onGoClick()
             withCredentials: false
         },
         dataType: 'json'
-    } ).done(function(data) { onGetResultBacklinks(data); });  
+    } ).done(function(data) { appl.onGetResultBacklinks(data); });  
 }
 
 $(document).ready(function()
