@@ -7,11 +7,15 @@
 
 <script>
 
+// ----------------------------------------------------------------------------
+
 class JSONSet extends Set {
     toJSON () {
         return [...this]
     }
 }
+
+// ----------------------------------------------------------------------------
 
 class Graph
 {
@@ -37,6 +41,8 @@ class Graph
         this.linksIn[to].add(from);
     }
 }
+
+// ----------------------------------------------------------------------------
 
 class Application
 {
@@ -70,10 +76,15 @@ class Application
         this.onStepComplete();
     }
 
-    onStepComplete()
+    onStepBegin()
     {
         this.operations++;
-        if (this.operations == 2)
+    }
+
+    onStepComplete()
+    {
+        this.operations--;
+        if (this.operations == 0)
         {
             this.onOperationComplete();
         }
@@ -98,6 +109,8 @@ class Application
     }
 }
 
+// ----------------------------------------------------------------------------
+
 function onGoClick()
 {
     appl = new Application(); 
@@ -110,6 +123,7 @@ function onGoClick()
     }
     appl.centerArticle = thePage;
 
+    appl.onStepBegin();
     $.ajax( {
         url: 'https://en.wikipedia.org/w/api.php',
         data: {
@@ -127,6 +141,7 @@ function onGoClick()
         dataType: 'json'
     } ).done(function(data) { appl.onGetResultLinks(data); });
 
+    appl.onStepBegin();
     $.ajax( {
         url: 'https://en.wikipedia.org/w/api.php',
         data: {
@@ -144,6 +159,8 @@ function onGoClick()
         dataType: 'json'
     } ).done(function(data) { appl.onGetResultBacklinks(data); });  
 }
+
+// ----------------------------------------------------------------------------
 
 $(document).ready(function()
 {    
