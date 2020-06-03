@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+$(document).ready(function(){
+    $("#gobutton").click(function(){
+        $("#output_ul").empty();
+        $("#output_ul").append("<li>World, hello!");
+    });
+    
+
+});
+
+
+
+</script>
+
+</head>
+
+<body>
+
+<input type="text" id="pagetitle"><br>
+<input type="button" id="gobutton" value="GO">
+
+<div id="output">
+    <ul id="output_ul">
+        <li>Hello, world!</li>
+    </ul>
+</div>
+
+</body>
+
+</html>
