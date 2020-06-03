@@ -73,26 +73,26 @@ class Result
     }
 }
 
-function onGetResultLinks(data, from)
+function onGetResultLinks(data)
 {
     const dqp = data.query.pages;
     const links = dqp[Object.keys(dqp)[0]].links;
     const titles = links.map(x => x.title);
 
     let graph = result.graph;
-    titles.forEach(i => graph.addLink(from, i));
+    titles.forEach(i => graph.addLink(result.centerArticle, i));
 
     result.onStepComplete();
 }
 
-function onGetResultBacklinks(data, to)
+function onGetResultBacklinks(data)
 {
     const dqp = data.query.pages;
     const linkshere = dqp[Object.keys(dqp)[0]].linkshere;
     const titles = linkshere.map(x => x.title);
 
     let graph = result.graph;
-    titles.forEach(i => graph.addLink(i, to));
+    titles.forEach(i => graph.addLink(i, result.centerArticle));
 
     result.onStepComplete();
 }
@@ -124,7 +124,7 @@ function onGoClick()
             withCredentials: false
         },
         dataType: 'json'
-    } ).done(function(data) { onGetResultLinks(data, thePage); });
+    } ).done(function(data) { onGetResultLinks(data); });
 
     $.ajax( {
         url: 'https://en.wikipedia.org/w/api.php',
@@ -141,7 +141,7 @@ function onGoClick()
             withCredentials: false
         },
         dataType: 'json'
-    } ).done(function(data) { onGetResultBacklinks(data, thePage); });  
+    } ).done(function(data) { onGetResultBacklinks(data); });  
 }
 
 $(document).ready(function()
