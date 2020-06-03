@@ -9,7 +9,7 @@
 
 function onGetResult(data)
 {
-    $("#json_out").text(JSON.stringify(data));
+    $("#json_out").text(JSON.stringify(data, null, 2));
 }
 
 function onGoClick()
@@ -21,7 +21,8 @@ function onGoClick()
         prop: 'links',
         format: 'json',
         titles: $("#pagetitle").val(),
-        origin: '*'
+        origin: '*',
+        pllimit: 'max'
     },
     xhrFields: {
         withCredentials: false
