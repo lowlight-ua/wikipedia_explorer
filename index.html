@@ -7,39 +7,77 @@
 
 <script>
 
-function onGetResultLinks(data)
+class JSONSet extends Set {
+    toJSON () {
+        return [...this]
+    }
+}
+
+class Graph
+{
+    constructor()
+    {
+        this.links = {};
+    }
+
+    addLink(from, to)
+    {
+        if (!(from in this.links))
+        {
+            this.links[from] = new JSONSet();
+        }
+        this.links[from].add(to);
+    }
+}
+
+let graph = new Graph();
+
+function onGetResultLinks(data, from)
 {
     const dqp = data.query.pages;
     const links = dqp[Object.keys(dqp)[0]].links;
     const titles = links.map(x => x.title);
-    $("#json_out").text(JSON.stringify(titles, null, 2));
+    // $("#json_out").append(JSON.stringify(titles, null, 2));
+    titles.forEach(i => graph.addLink(from, i));
+    $("#json_out").append(JSON.stringify(graph, null, 2));
 }
 
-function onGetResultBacklinks(data)
+function onGetResultBacklinks(data, to)
 {
     const dqp = data.query.pages;
     const linkshere = dqp[Object.keys(dqp)[0]].linkshere;
     const titles = linkshere.map(x => x.title);
-    $("#json_out").text(JSON.stringify(titles, null, 2));
+    // $("#json_out").append(JSON.stringify(titles, null, 2));
+    titles.forEach(i => graph.addLink(i, to));
+    $("#json_out").append(JSON.stringify(graph, null, 2));
 }
 
 function onGoClick()
 {
-    // $.ajax( {
-    //     url: 'https://en.wikipedia.org/w/api.php',
-    //     data: {
-    //         action: 'query',
-    //         prop: 'links',
-    //         format: 'json',
-    //         titles: $("#pagetitle").val(),
-    //         origin: '*',
-    //         pllimit: 'max'
-    //     },
-    //     xhrFields: {
-    //         withCredentials: false
-    //     },
-    //     dataType: 'json'
-    // } ).done(onGetResultLinks);
+    graph = new Graph(); 
+
+    let thePage = $("#pagetitle").val();
+    if (thePage.length == 0)
+    {
+        return;
+    }
+
+    $.ajax( {
+        url: 'https://en.wikipedia.org/w/api.php',
+        data: {
+            action: 'query',
+            prop: 'links',
+            format: 'json',
+            titles: thePage,
+            plnamespace: 0,
+            origin: '*',
+            pllimit: 'max'
+        },
+        xhrFields: {
+            withCredentials: false
+        },
+        dataType: 'json'
+    } ).done(function(data) { onGetResultLinks(data, thePage); });
 
     $.ajax( {
         url: 'https://en.wikipedia.org/w/api.php',
@@ -48,6 +86,7 @@ function onGoClick()
             prop: 'linkshere',
             titles: $("#pagetitle").val(),
             format: 'json',
+            lhnamespace: 0,
             origin: '*',
             lhlimit: 'max'
         },
@@ -55,7 +94,7 @@ function onGoClick()
             withCredentials: false
         },
         dataType: 'json'
-    } ).done(onGetResultBacklinks);    
+    } ).done(function(data) { onGetResultBacklinks(data, thePage); });  
 }
 
 $(document).ready(function()
