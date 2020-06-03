@@ -17,16 +17,17 @@ class Graph
 {
     constructor()
     {
-        this.links = {};
+        this.linksOut = {};
+        this.centerArticle = "";
     }
 
     addLink(from, to)
     {
-        if (!(from in this.links))
+        if (!(from in this.linksOut))
         {
-            this.links[from] = new JSONSet();
+            this.linksOut[from] = new JSONSet();
         }
-        this.links[from].add(to);
+        this.linksOut[from].add(to);
     }
 }
 
@@ -49,7 +50,7 @@ class Result
 
     onOperationComplete()
     {
-        $("#json_out").append(JSON.stringify(this.graph, null, 2));
+        $("#json_out").append(JSON.stringify(this.graph, null, 2));        
     }
 }
 
@@ -87,6 +88,7 @@ function onGoClick()
     {
         return;
     }
+    result.centerArticle = thePage;
 
     $.ajax( {
         url: 'https://en.wikipedia.org/w/api.php',
