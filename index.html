@@ -8,11 +8,13 @@
 <script>
 
 $(document).ready(function(){
-    $("#gobutton").click(function(){
+    
+    function onGoClick(){
         $("#output_ul").empty();
         $("#output_ul").append("<li>World, hello!");
-    });
+    }
     
+    $("#gobutton").click(onGoClick);
 
 });
 
