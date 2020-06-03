@@ -7,17 +7,27 @@
 
 <script>
 
-function onGetResult(data, status)
+function onGetResult(data)
 {
     $("#json_out").text(JSON.stringify(data));
 }
 
 function onGoClick()
 {
-    var pageTitle = encodeURIComponent($("#pagetitle").val());
-    var uri = 'https://en.wikipedia.org/w/api.php/w/api.php?action=query&prop=links&format=json&origin=*&titles=' 
-        + pageTitle;
-    $.get(uri, onGetResult);
+    $.ajax( {
+    url: 'https://en.wikipedia.org/w/api.php',
+    data: {
+        action: 'query',
+        prop: 'links',
+        format: 'json',
+        titles: $("#pagetitle").val(),
+        origin: '*'
+    },
+    xhrFields: {
+        withCredentials: false
+    },
+    dataType: 'json'
+} ).done(onGetResult);
     
 }
 
