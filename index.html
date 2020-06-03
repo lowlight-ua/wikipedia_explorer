@@ -76,15 +76,10 @@ class Application
         this.onStepComplete();
     }
 
-    gotBingResults(data)
+    gotWikiSearchResult(data)
     {
-        console.log("Got bing results");
-        let regexp = /wikipedia\.org\/wiki\/([^"<#]+)/g;
-        let matches = [...data.matchAll(regexp)];
-        const articles = matches.map(x => x[1]);
-        const articlesSet = new Set(articles);
-        console.log(articlesSet);
-       
+        console.log(data);
+
         this.onStepComplete();
     }
 
@@ -159,7 +154,7 @@ function onGoClick()
         data: {
             action: 'query',
             prop: 'linkshere',
-            titles: $("#pagetitle").val(),
+            titles: thePage,
             format: 'json',
             lhnamespace: 0,
             origin: '*',
@@ -173,15 +168,21 @@ function onGoClick()
 
     appl.onStepBegin();
     $.ajax( {
-        url: 'https://cors-anywhere.herokuapp.com/bing.com/search',
+        url: 'https://en.wikipedia.org/w/api.php',
         data: {
-            q: '"' + thePage + '" site:en.wikipedia.org'
+            action: 'query',
+            list: 'search',
+            srsearch: thePage,
+            format: 'json',
+            formatversion: 2,
+            origin: '*',
+            srlimit: 25
         },
         xhrFields: {
-            withCredentials: false,
-            Origin: "bing.com"
-        }
-    } ).done(function(data) { appl.gotBingResults(data); });
+            withCredentials: false
+        },
+        dataType: 'json'
+    } ).done(function(data) { appl.gotWikiSearchResult(data); });  
 }
 
 // ----------------------------------------------------------------------------
