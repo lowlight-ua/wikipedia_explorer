@@ -7,7 +7,7 @@
 
 <script>
 
-function onGetResult(data)
+function onGetResultLinks(data)
 {
     const dqp = data.query.pages;
     const links = dqp[Object.keys(dqp)[0]].links;
@@ -15,24 +15,47 @@ function onGetResult(data)
     $("#json_out").text(JSON.stringify(titles, null, 2));
 }
 
+function onGetResultBacklinks(data)
+{
+    //const dqp = data.query.pages;
+    //const links = dqp[Object.keys(dqp)[0]].links;
+    //const titles = links.map(x => x.title);
+    $("#json_out").text(JSON.stringify(data, null, 2));
+}
+
 function onGoClick()
 {
+    // $.ajax( {
+    //     url: 'https://en.wikipedia.org/w/api.php',
+    //     data: {
+    //         action: 'query',
+    //         prop: 'links',
+    //         format: 'json',
+    //         titles: $("#pagetitle").val(),
+    //         origin: '*',
+    //         pllimit: 'max'
+    //     },
+    //     xhrFields: {
+    //         withCredentials: false
+    //     },
+    //     dataType: 'json'
+    // } ).done(onGetResultLinks);
+
     $.ajax( {
-    url: 'https://en.wikipedia.org/w/api.php',
-    data: {
-        action: 'query',
-        prop: 'links',
-        format: 'json',
-        titles: $("#pagetitle").val(),
-        origin: '*',
-        pllimit: 'max'
-    },
-    xhrFields: {
-        withCredentials: false
-    },
-    dataType: 'json'
-} ).done(onGetResult);
-    
+        url: 'https://en.wikipedia.org/w/api.php',
+        data: {
+            action: 'query',
+            prop: 'linkshere',
+            titles: $("#pagetitle").val(),
+            format: 'json',
+            origin: '*',
+            lhlimit: 'max'
+        },
+        xhrFields: {
+            withCredentials: false
+        },
+        dataType: 'json'
+    } ).done(onGetResultBacklinks);    
 }
 
 $(document).ready(function()
