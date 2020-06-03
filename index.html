@@ -52,7 +52,7 @@ class Application
         this.operations = 0;
     }
 
-    onGetResultLinks(data)
+    gotWikiLinks(data)
     {
         const dqp = data.query.pages;
         const links = dqp[Object.keys(dqp)[0]].links;
@@ -64,7 +64,7 @@ class Application
         this.onStepComplete();
     }
 
-    onGetResultBacklinks(data)
+    gotWikiBacklinks(data)
     {
         const dqp = data.query.pages;
         const linkshere = dqp[Object.keys(dqp)[0]].linkshere;
@@ -139,7 +139,7 @@ function onGoClick()
             withCredentials: false
         },
         dataType: 'json'
-    } ).done(function(data) { appl.onGetResultLinks(data); });
+    } ).done(function(data) { appl.gotWikiLinks(data); });
 
     appl.onStepBegin();
     $.ajax( {
@@ -157,7 +157,7 @@ function onGoClick()
             withCredentials: false
         },
         dataType: 'json'
-    } ).done(function(data) { appl.onGetResultBacklinks(data); });  
+    } ).done(function(data) { appl.gotWikiBacklinks(data); });  
 }
 
 // ----------------------------------------------------------------------------
