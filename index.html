@@ -18,6 +18,7 @@ class Graph
     constructor()
     {
         this.linksOut = {};
+        this.linksIn = {};
         this.centerArticle = "";
     }
 
@@ -28,6 +29,12 @@ class Graph
             this.linksOut[from] = new JSONSet();
         }
         this.linksOut[from].add(to);
+
+        if (!(to in this.linksIn))
+        {
+            this.linksIn[to] = new JSONSet();
+        }
+        this.linksIn[to].add(from);
     }
 }
 
@@ -50,7 +57,19 @@ class Result
 
     onOperationComplete()
     {
-        $("#json_out").append(JSON.stringify(this.graph, null, 2));        
+        // $("#json_out").append(JSON.stringify(this.graph, null, 2));        
+
+        console.log(this.centerArticle);
+        const linksOut = this.graph.linksOut[this.centerArticle];
+        const linksIn  =  this.graph.linksIn[this.centerArticle];
+        for (var it = linksOut.values(), val= null; val=it.next().value; ) 
+        {
+            console.log("   " + val);
+            if (linksIn.has(val))
+            {
+                $("#json_out").append(val + "\n");
+            }
+        }
     }
 }
 
