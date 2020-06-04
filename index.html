@@ -103,16 +103,28 @@ class Application
 
     onOperationComplete()
     {
-        $("#json_out").append(JSON.stringify(this.graph.searchOut, null, 2));        
-
-        let graph = this.graph;
+        const related = [];
+        const graph = this.graph;
         const linksOut =  graph.linksOut[graph.centerArticle];
-        const linksIn  =  graph.linksIn[graph.centerArticle];
+        const linksIn  =  graph.linksIn[graph.centerArticle];            
+        const searchOut  =  graph.searchOut[graph.centerArticle];
+
         for (var it = linksOut.values(), val= null; val=it.next().value; ) 
         {
-            if (linksIn.has(val))
+            const linkRank = linksIn.has(val) + linksIn.has(val) + searchOut.has(val);
+            if (!related[linkRank])
             {
-                $("#json_out").append(val + "\n");
+                related[linkRank] = [];
+            }
+            related[linkRank].push(val);
+        }
+
+        for(let i=related.length - 1; i >= 0; i--)
+        {
+            const articles = related[i];
+            for(let j=0; j < articles.length; j++)
+            {
+                $("#json_out").append(i + "   " + related[i][j] + "\n");
             }
         }
     }
