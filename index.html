@@ -63,7 +63,7 @@ class Application
     constructor()
     {
         this.graph = new Graph();
-        this.operations = 3;
+        this.steps = 3;
     }
 
     gotWikiLinks(data)
@@ -102,8 +102,8 @@ class Application
 
     onStepComplete()
     {
-        this.operations--;
-        if (this.operations == 0)
+        this.steps--;
+        if (this.steps == 0)
         {
             this.onOperationComplete();
         }
