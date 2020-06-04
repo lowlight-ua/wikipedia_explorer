@@ -7,6 +7,10 @@
 
 <script>
 
+'use strict';
+
+let appl = {};
+
 // ----------------------------------------------------------------------------
 
 class JSONSet extends Set {
@@ -23,6 +27,7 @@ class Graph
     {
         this.linksOut = {};
         this.linksIn = {};
+        this.searchOut = {};
         this.centerArticle = "";
     }
 
@@ -40,6 +45,15 @@ class Graph
         }
         this.linksIn[to].add(from);
     }
+
+    addSearchOut(term, results)
+    {
+	    if (!(term in this.searchOut))
+        {
+            this.searchOut[term] = new JSONSet();
+        }	
+        this.searchOut[term].add(results);
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -49,7 +63,7 @@ class Application
     constructor()
     {
         this.graph = new Graph();
-        this.operations = 0;
+        this.operations = 3;
     }
 
     gotWikiLinks(data)
@@ -78,14 +92,12 @@ class Application
 
     gotWikiSearchResult(data)
     {
-        console.log(data);
+        const dqs = data.query.search;
+        const titles = dqs.map(x => x.title);
+        let graph = this.graph;
 
+        titles.forEach(i => graph.addSearchOut(graph.centerArticle, i));
         this.onStepComplete();
-    }
-
-    onStepBegin()
-    {
-        this.operations++;
     }
 
     onStepComplete()
@@ -99,15 +111,13 @@ class Application
 
     onOperationComplete()
     {
-        // $("#json_out").append(JSON.stringify(this.graph, null, 2));        
+        $("#json_out").append(JSON.stringify(this.graph.searchOut, null, 2));        
 
-        // console.log(this.centerArticle);
         let graph = this.graph;
         const linksOut =  graph.linksOut[graph.centerArticle];
         const linksIn  =  graph.linksIn[graph.centerArticle];
         for (var it = linksOut.values(), val= null; val=it.next().value; ) 
         {
-            // console.log("   " + val);
             if (linksIn.has(val))
             {
                 $("#json_out").append(val + "\n");
@@ -128,9 +138,8 @@ function onGoClick()
     {
         return;
     }
-    appl.centerArticle = thePage;
+    graph.centerArticle = thePage;
 
-    appl.onStepBegin();
     $.ajax( {
         url: 'https://en.wikipedia.org/w/api.php',
         data: {
@@ -148,7 +157,6 @@ function onGoClick()
         dataType: 'json'
     } ).done(function(data) { appl.gotWikiLinks(data); });
 
-    appl.onStepBegin();
     $.ajax( {
         url: 'https://en.wikipedia.org/w/api.php',
         data: {
@@ -166,7 +174,6 @@ function onGoClick()
         dataType: 'json'
     } ).done(function(data) { appl.gotWikiBacklinks(data); });  
 
-    appl.onStepBegin();
     $.ajax( {
         url: 'https://en.wikipedia.org/w/api.php',
         data: {
