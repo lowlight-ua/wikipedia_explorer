@@ -11,6 +11,15 @@
 function onGoClick()
 {
     console.log("onGoClick");
+
+    let thePage = $("#pagetitle").val();
+    if (thePage.length == 0)
+    {
+        return;
+    }
+
+    expl = new Explorer();
+    expl.run(thePage);
 }
 
 $(document).ready(function()
