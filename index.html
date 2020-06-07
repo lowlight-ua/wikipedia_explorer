@@ -10,66 +10,7 @@
 
 function onGoClick()
 {
-    appl = new Application(); 
-    let graph = appl.graph;
-
-    let thePage = $("#pagetitle").val();
-    if (thePage.length == 0)
-    {
-        return;
-    }
-    graph.centerArticle = thePage;
-
-    $.ajax( {
-        url: 'https://en.wikipedia.org/w/api.php',
-        data: {
-            action: 'query',
-            prop: 'links',
-            format: 'json',
-            titles: thePage,
-            plnamespace: 0,
-            origin: '*',
-            pllimit: 'max'
-        },
-        xhrFields: {
-            withCredentials: false
-        },
-        dataType: 'json'
-    } ).done(function(data) { appl.gotWikiLinks(data); });
-
-    $.ajax( {
-        url: 'https://en.wikipedia.org/w/api.php',
-        data: {
-            action: 'query',
-            prop: 'linkshere',
-            titles: thePage,
-            format: 'json',
-            lhnamespace: 0,
-            origin: '*',
-            lhlimit: 'max'
-        },
-        xhrFields: {
-            withCredentials: false
-        },
-        dataType: 'json'
-    } ).done(function(data) { appl.gotWikiBacklinks(data); });  
-
-    $.ajax( {
-        url: 'https://en.wikipedia.org/w/api.php',
-        data: {
-            action: 'query',
-            list: 'search',
-            srsearch: thePage,
-            format: 'json',
-            formatversion: 2,
-            origin: '*',
-            srlimit: 25
-        },
-        xhrFields: {
-            withCredentials: false
-        },
-        dataType: 'json'
-    } ).done(function(data) { appl.gotWikiSearchResult(data); });  
+    console.log("onGoClick");
 }
 
 $(document).ready(function()
