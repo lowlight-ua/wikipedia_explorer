@@ -4,59 +4,83 @@ let expl = {};
 
 // ----------------------------------------------------------------------------
 
-class Article
-{
-    constructor(value)
-    {
+class Article {
+    title;
+    linksTo = [];
+
+    constructor(value) {
         this.title = value;
-        console.log(this);
-    }
-
-    get title() { return this.title_; }
-    set title(value)
-    {
-        if (value.length == 0)
-        {
-            throw new Error("Empty article title");
-        }
-        this.title_ = value;
-    }
-
-    get pageid() { return this.pageid_; }
-    set pageid(value) 
-    {
-        if(!value) { throw new Error("Empty pageid"); }
-        this.pageid_ = value;
     }
 }
 
 // ----------------------------------------------------------------------------
 
-class Explorer
+class AjaxOp
 {
-    constructor()
-    {
+    explorer;
+    ajaxConfig;
+
+    constructor(explorer, ajaxConfig) {
+        if(!explorer) { throw new Error("explorer empty"); }
+        this.explorer = explorer;
+        if(!ajaxConfig) { throw new Error("ajaxConfig empty"); }
+        this.ajaxConfig = ajaxConfig;
+    }
+
+    run() {
+        $.ajax(this.ajaxConfig).done(this.onDone);
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+class OpIncomingLinks extends AjaxOp {
+    constructor(explorer, ajaxConfig) {
+        super(explorer, ajaxConfig);
+    }
+    
+    onDone() {
+        console.log("OpIncomingLinks.onDone()");
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+class Explorer {
+    constructor() {
         this.articles = {};
         this.steps = 0;
     }
 
-    run(title)
-    {
+    run(title) {
         this.articles[title] = new Article(title);
+        new OpIncomingLinks(this, {
+            url: 'https://en.wikipedia.org/w/api.php',
+            data: {
+                action: 'query',
+                list: 'search',
+                srsearch: title,
+                format: 'json',
+                formatversion: 2,
+                origin: '*',
+                srlimit: 20
+            },
+            xhrFields: {
+                withCredentials: false
+            },
+            dataType: 'json'
+        }).run();
     }
 
-    onStepBegin()
-    {
+    onStepBegin() {
         this.steps++;
     }
 
-    onStepComplete()
-    {
+    onStepComplete() {
         this.steps--;
     }
 
-    onOperationComplete()
-    {
+    onOperationComplete() {
         console.log("Operation complete");
     }
 }

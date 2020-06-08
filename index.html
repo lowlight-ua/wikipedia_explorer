@@ -8,13 +8,11 @@
 <script src="wikipedia_explorer.js"></script>
 <script>
 
-function onGoClick()
-{
+function onGoClick() {
     console.log("onGoClick");
 
     let thePage = $("#pagetitle").val();
-    if (thePage.length == 0)
-    {
+    if (thePage.length == 0) {
         return;
     }
 
@@ -22,8 +20,7 @@ function onGoClick()
     expl.run(thePage);
 }
 
-$(document).ready(function()
-{    
+$(document).ready(function() {    
     $("#gobutton").click(onGoClick);
 });
 
