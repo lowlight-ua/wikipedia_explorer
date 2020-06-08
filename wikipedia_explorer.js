@@ -27,7 +27,8 @@ class AjaxOp
         if(!ajaxConfig) { throw new Error("ajaxConfig empty"); }
         this.ajaxConfig = ajaxConfig;
 
-        const cfg = this.ajaxConfig;        
+        const cfg = this.ajaxConfig;    
+        cfg.url = 'https://en.wikipedia.org/w/api.php',    
         cfg.data.format = 'json';
         cfg.data.origin = '*';
         cfg.xhrFields = {};
@@ -43,7 +44,15 @@ class AjaxOp
 // ----------------------------------------------------------------------------
 
 class OpIncomingLinks extends AjaxOp {
-    constructor(explorer, ajaxConfig) {
+    constructor(explorer, title) {
+        const ajaxConfig = {
+            data: {
+                action: 'query',
+                list: 'search',
+                srsearch: title,
+                srlimit: 20
+            }
+        };
         super(explorer, ajaxConfig);
     }
     
@@ -62,15 +71,7 @@ class Explorer {
 
     run(title) {
         this.articles[title] = new Article(title);
-        new OpIncomingLinks(this, {
-            url: 'https://en.wikipedia.org/w/api.php',
-            data: {
-                action: 'query',
-                list: 'search',
-                srsearch: title,
-                srlimit: 20
-            }
-        }).run();
+        new OpIncomingLinks(this, title).run();
     }
 
     onStepBegin() {
