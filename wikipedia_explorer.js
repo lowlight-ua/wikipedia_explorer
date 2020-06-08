@@ -101,6 +101,8 @@ class Explorer {
     }
 
     onOperationComplete() {
-        console.log(this);
+        console.log("=============== END RESULT ===============\n");
+        console.log("Incoming links, by relevance: \n");
+        Object.values(this.articles).forEach(i => console.log(i.linksTo));
     }
 }
