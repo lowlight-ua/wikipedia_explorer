@@ -18,6 +18,8 @@ class Article
 
 // ----------------------------------------------------------------------------
 
+// Any jquery ajax operation, based on raw query configuration.
+
 class AjaxOp
 {
     explorer;
@@ -49,26 +51,19 @@ class AjaxOp
 
 // ----------------------------------------------------------------------------
 
-class AjaxOpByTitle extends AjaxOp
+class OpLinksTo extends AjaxOp 
 {
     title;
-
+    
     constructor(explorer, title) {
         super(explorer);
         if(!title) { throw new Error("Empty title"); }
         this.title = title;
     }
-}
-
-// ----------------------------------------------------------------------------
-
-class OpLinksTo extends AjaxOpByTitle 
-{
-    constructor(explorer, title) {
-        super(explorer, title);
-    }
 
     run() {
+        // Incoming links
+
         // Todo: sanitize title to not interfere with the regexp
         const title = this.title;
         const q = 'insource:/"[[' + title + '"/ linksto:"' + title + '"';
@@ -76,32 +71,13 @@ class OpLinksTo extends AjaxOpByTitle
         super.run({
             data: {
                 action: 'query',
+
+                // Incoming links
                 list: 'search',
                 srsearch: q,
-                srlimit: 20
-            }
-        });
-    }
-    
-    onDone(data) {
-        const dqs = data.query.search;
-        const article = this.explorer.articles[this.title];
-        dqs.forEach(i => article.linksTo.push(i.title));
-    }
-}
+                srlimit: 20,
 
-// ----------------------------------------------------------------------------
-
-class OpLinksFrom extends AjaxOpByTitle 
-{
-    constructor(explorer, title) {
-        super(explorer, title);
-    }
-
-    run() {
-        super.run({
-            data: {
-                action: 'query',
+                // Outgoing links
                 prop: 'links',
                 titles: this.title,
                 plnamespace: 0,
@@ -109,11 +85,17 @@ class OpLinksFrom extends AjaxOpByTitle
             }
         });
     }
-
+    
     onDone(data) {
+        const article = this.explorer.articles[this.title];
+
+        // Incoming links        
+        const dqs = data.query.search;
+        dqs.forEach(i => article.linksTo.push(i.title));
+
+        // Outgoing links
         const dqp = data.query.pages;
         const links = dqp[Object.keys(dqp)[0]].links;
-        const article = this.explorer.articles[this.title];
         links.forEach(i => article.linksFrom.push(i.title));
     }
 }
@@ -130,7 +112,7 @@ class Explorer
     run(title) {
         this.articles[title] = new Article(title);
         new OpLinksTo(this, title).run();
-        new OpLinksFrom(this, title).run();
+        // new OpLinksFrom(this, title).run();
     }
 
     onStepBegin() {
