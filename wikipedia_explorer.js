@@ -161,7 +161,11 @@ class OpSectionLinks extends AjaxOpByTitle
         console.log(data);
         const links = data.parse.links;
         const article = this.explorer.articles[this.title];
-        links.forEach(i => article.linksFromSeeAlso.push(i['*']));
+        links.forEach(function(i) { 
+            if(i.ns === 0 && i.exists !== undefined) {
+                article.linksFromSeeAlso.push(i['*']);
+            }
+        });
     }
 }
 
