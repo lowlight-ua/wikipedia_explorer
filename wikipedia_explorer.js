@@ -37,7 +37,12 @@ class AjaxOp
     }
 
     run() {
-        $.ajax(this.ajaxConfig).done(this.onDone);
+        this.explorer.onStepBegin();
+        const thisOp = this;
+        $.ajax(this.ajaxConfig).done(function(data, status) {
+            thisOp.onDone(data, status)
+            thisOp.explorer.onStepComplete();
+        });
     }
 }
 
@@ -76,10 +81,13 @@ class Explorer {
 
     onStepBegin() {
         this.steps++;
+        console.log("onStepBegin" + this.steps);
     }
 
     onStepComplete() {
         this.steps--;
+        console.log("onStepComplete" + this.steps);
+        if (this.steps == 0) { this.onOperationComplete(); }
     }
 
     onOperationComplete() {
