@@ -62,7 +62,6 @@ class OpIncomingLinks extends AjaxOp {
     }
     
     onDone() {
-        console.log("OpIncomingLinks.onDone()");
     }
 }
 
@@ -81,16 +80,13 @@ class Explorer {
 
     onStepBegin() {
         this.steps++;
-        console.log("onStepBegin" + this.steps);
     }
 
     onStepComplete() {
         this.steps--;
-        console.log("onStepComplete" + this.steps);
         if (this.steps == 0) { this.onOperationComplete(); }
     }
 
     onOperationComplete() {
-        console.log("Operation complete");
     }
 }
