@@ -11,6 +11,7 @@ class Article
     linksFrom = [];
     linksFromSeeAlso = [];
     categories = [];
+    assessments = {};
 
     constructor(value) {
         if(!value) { throw new Error("Empty title"); }
@@ -91,7 +92,7 @@ class OpQuery extends AjaxOpByTitle
                 list: 'search',                 
 
                 // For all prop-based queries
-                prop: 'links|categories',
+                prop: 'links|categories|pageassessments',
                 titles: this.title, 
 
                 // -----------------------------------
@@ -106,7 +107,10 @@ class OpQuery extends AjaxOpByTitle
 
                 // Categories (prop: 'categories')
                 clshow: '!hidden',
-                cllimit: 'max'
+                cllimit: 'max',
+
+                // Page assessments (prop: you guessed it)
+                palimit: 'max'
 
                 // -----------------------------------
             }
@@ -129,6 +133,10 @@ class OpQuery extends AjaxOpByTitle
         // Categories
         const categories = dqp0.categories;
         categories.forEach(i => article.categories.push(i.title));
+
+        // Page assessments
+        const ass = dqp0.pageassessments;   
+        article.assessments = ass;
     }
 }
 
@@ -236,5 +244,7 @@ class Explorer
         Object.values(this.articles).forEach(i => console.log(i.linksFromSeeAlso));
         console.log("Categories: \n");
         Object.values(this.articles).forEach(i => console.log(i.categories));
+        console.log("Wikiprojects and assessments:");
+        Object.values(this.articles).forEach(i => console.log(i.assessments));
    }
 }
