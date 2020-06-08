@@ -2,13 +2,14 @@
 
 let expl = {};
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 class Article {
     title;
     linksTo = [];
 
     constructor(value) {
+        if(!value) { throw new Error("Empty title"); }
         this.title = value;
     }
 }
@@ -18,28 +19,26 @@ class Article {
 class AjaxOp
 {
     explorer;
-    ajaxConfig;
 
-    constructor(explorer, ajaxConfig) {
+    constructor(explorer) {
         if(!explorer) { throw new Error("explorer empty"); }
         this.explorer = explorer;
+    }
 
+    run(ajaxConfig) {
         if(!ajaxConfig) { throw new Error("ajaxConfig empty"); }
-        this.ajaxConfig = ajaxConfig;
 
-        const cfg = this.ajaxConfig;    
+        const cfg = ajaxConfig;    
         cfg.url = 'https://en.wikipedia.org/w/api.php',    
         cfg.data.format = 'json';
         cfg.data.origin = '*';
         cfg.xhrFields = {};
         cfg.xhrFields.withCredentials = false;
         cfg.dataType = 'json';
-    }
 
-    run() {
         this.explorer.onStepBegin();
         const thisOp = this;
-        $.ajax(this.ajaxConfig).done(function(data, status) {
+        $.ajax(ajaxConfig).done(function(data, status) {
             thisOp.onDone(data, status)
             thisOp.explorer.onStepComplete();
         });
@@ -49,23 +48,33 @@ class AjaxOp
 // ----------------------------------------------------------------------------
 
 class OpIncomingLinks extends AjaxOp {
-    constructor(explorer, title) {
-        const ajaxConfig = {
+    title;
+
+    constructor(explorer) {
+        super(explorer);
+    }
+
+    run(title) {
+        if(!title) { throw new Error("Empty title"); }
+        this.title = title;
+        super.run({
             data: {
                 action: 'query',
                 list: 'search',
                 srsearch: title,
                 srlimit: 20
             }
-        };
-        super(explorer, ajaxConfig);
+        });
     }
     
-    onDone() {
+    onDone(data) {
+        const dqs = data.query.search;
+        const article = this.explorer.articles[this.title];
+        dqs.forEach(i => article.linksTo.push(i.title));
     }
 }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 class Explorer {
     constructor() {
@@ -75,7 +84,7 @@ class Explorer {
 
     run(title) {
         this.articles[title] = new Article(title);
-        new OpIncomingLinks(this, title).run();
+        new OpIncomingLinks(this).run(title);
     }
 
     onStepBegin() {
@@ -88,5 +97,6 @@ class Explorer {
     }
 
     onOperationComplete() {
+        console.log(this);
     }
 }
