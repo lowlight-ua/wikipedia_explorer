@@ -4,7 +4,8 @@ let expl = {};
 
 // ============================================================================
 
-class Article {
+class Article 
+{
     title;
     linksTo = [];
     linksFrom = [];
@@ -48,18 +49,28 @@ class AjaxOp
 
 // ----------------------------------------------------------------------------
 
-class OpLinksTo extends AjaxOp {
+class AjaxOpByTitle extends AjaxOp
+{
     title;
 
-    constructor(explorer) {
+    constructor(explorer, title) {
         super(explorer);
-    }
-
-    run(title) {
         if(!title) { throw new Error("Empty title"); }
         this.title = title;
+    }
+}
 
+// ----------------------------------------------------------------------------
+
+class OpLinksTo extends AjaxOpByTitle 
+{
+    constructor(explorer, title) {
+        super(explorer, title);
+    }
+
+    run() {
         // Todo: sanitize title to not interfere with the regexp
+        const title = this.title;
         const q = 'insource:/"[[' + title + '"/ linksto:"' + title + '"';
         
         super.run({
@@ -81,22 +92,18 @@ class OpLinksTo extends AjaxOp {
 
 // ----------------------------------------------------------------------------
 
-class OpLinksFrom extends AjaxOp {
-    title;
-
-    constructor(explorer) {
-        super(explorer);
+class OpLinksFrom extends AjaxOpByTitle 
+{
+    constructor(explorer, title) {
+        super(explorer, title);
     }
 
-    run(title) {
-        if(!title) { throw new Error("Empty title"); }
-        this.title = title;
-
+    run() {
         super.run({
             data: {
                 action: 'query',
                 prop: 'links',
-                titles: title,
+                titles: this.title,
                 plnamespace: 0,
                 pllimit: 'max'
             }
@@ -113,7 +120,8 @@ class OpLinksFrom extends AjaxOp {
 
 // ============================================================================
 
-class Explorer {
+class Explorer 
+{
     constructor() {
         this.articles = {};
         this.steps = 0;
@@ -121,8 +129,8 @@ class Explorer {
 
     run(title) {
         this.articles[title] = new Article(title);
-        new OpLinksTo(this).run(title);
-        new OpLinksFrom(this).run(title);
+        new OpLinksTo(this, title).run();
+        new OpLinksFrom(this, title).run();
     }
 
     onStepBegin() {
