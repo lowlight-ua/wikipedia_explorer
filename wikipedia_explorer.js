@@ -65,7 +65,7 @@ class AjaxOpByTitle extends AjaxOp
 
 // ----------------------------------------------------------------------------
 
-class OpLinksTo extends AjaxOpByTitle 
+class OpQuery extends AjaxOpByTitle 
 {
     constructor(explorer, title) {
         super(explorer, title);
@@ -131,6 +131,37 @@ class OpLinksTo extends AjaxOpByTitle
     }
 }
 
+// ----------------------------------------------------------------------------
+
+class OpParse extends AjaxOpByTitle 
+{
+    constructor(explorer, title) {
+        super(explorer, title);
+    }
+
+    run() {
+        super.run({
+            data: {
+                action: 'parse',
+                prop: 'sections',
+                page: this.title
+            }
+        });
+    }
+
+    onDone(data) {
+        console.log("onDone");
+        const sections = data.parse.sections;
+        let seeAlsoIndex = undefined;
+        for (let i of Object.values(sections)) {
+            if(i.line === "See also") {
+                seeAlsoIndex = i.index;
+                break;
+            }
+        }
+    }
+}
+
 // ============================================================================
 
 class Explorer 
@@ -142,8 +173,8 @@ class Explorer
 
     run(title) {
         this.articles[title] = new Article(title);
-        new OpLinksTo(this, title).run();
-        // new OpLinksFrom(this, title).run();
+        new OpQuery(this, title).run();
+        new OpParse(this, title).run();
     }
 
     onStepBegin() {
