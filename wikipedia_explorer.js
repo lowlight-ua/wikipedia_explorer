@@ -9,6 +9,7 @@ class Article
     title;
     linksTo = [];
     linksFrom = [];
+    categories = [];
 
     constructor(value) {
         if(!value) { throw new Error("Empty title"); }
@@ -70,33 +71,54 @@ class OpLinksTo extends AjaxOp
         
         super.run({
             data: {
+                // -----------------------------------
+
                 action: 'query',
 
-                // Incoming links
-                list: 'search',
+                // -----------------------------------
+
+                // For all search-based queries
+                list: 'search',                 
+
+                // For all prop-based queries
+                prop: 'links|categories',
+                titles: this.title, 
+
+                // -----------------------------------
+
+                // Incoming links (list: 'search')
                 srsearch: q,
                 srlimit: 'max',
 
-                // Outgoing links
-                prop: 'links',
-                titles: this.title,
+                // Outgoing links (prop: 'links')
                 plnamespace: 0,
-                pllimit: 'max'
+                pllimit: 'max',
+
+                // Categories (prop: 'categories')
+                clshow: '!hidden',
+                cllimit: 'max'
+
+                // -----------------------------------
             }
         });
     }
     
     onDone(data) {
         const article = this.explorer.articles[this.title];
+        const dqs = data.query.search;
+        const dqp = data.query.pages;
+        const dqp0 = dqp[Object.keys(dqp)[0]];
 
         // Incoming links        
-        const dqs = data.query.search;
         dqs.forEach(i => article.linksTo.push(i.title));
 
         // Outgoing links
-        const dqp = data.query.pages;
-        const links = dqp[Object.keys(dqp)[0]].links;
+        const links = dqp0.links;
         links.forEach(i => article.linksFrom.push(i.title));
+
+        // Categories
+        const categories = dqp0.categories;
+        categories.forEach(i => article.categories.push(i.title));
     }
 }
 
@@ -130,5 +152,7 @@ class Explorer
         Object.values(this.articles).forEach(i => console.log(i.linksTo));
         console.log("Outgoing links: \n");
         Object.values(this.articles).forEach(i => console.log(i.linksFrom));
-    }
+        console.log("Categories: \n");
+        Object.values(this.articles).forEach(i => console.log(i.categories));
+   }
 }
