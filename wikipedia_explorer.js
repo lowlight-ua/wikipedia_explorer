@@ -9,6 +9,7 @@ class Article
     title;
     linksTo = [];
     linksFrom = [];
+    linksFromSeeAlso = [];
     categories = [];
 
     constructor(value) {
@@ -133,6 +134,39 @@ class OpQuery extends AjaxOpByTitle
 
 // ----------------------------------------------------------------------------
 
+class OpSectionLinks extends AjaxOpByTitle
+{
+    sectionIndex;
+
+    constructor(explorer, title, sectionIndex) {
+        super(explorer, title);
+        if (!sectionIndex && sectionIndex !== 0) {
+            throw new Error("sectionIndex not defined");
+        }
+        this.sectionIndex = sectionIndex;
+    } 
+
+    run() {
+        super.run({
+            data: {
+                action: 'parse',
+                page: this.title,
+                prop: 'links',
+                section: this.sectionIndex
+            }
+        });
+    }
+
+    onDone(data) {
+        console.log(data);
+        const links = data.parse.links;
+        const article = this.explorer.articles[this.title];
+        links.forEach(i => article.linksFromSeeAlso.push(i['*']));
+    }
+}
+
+// ----------------------------------------------------------------------------
+
 class OpParse extends AjaxOpByTitle 
 {
     constructor(explorer, title) {
@@ -150,7 +184,6 @@ class OpParse extends AjaxOpByTitle
     }
 
     onDone(data) {
-        console.log("onDone");
         const sections = data.parse.sections;
         let seeAlsoIndex = undefined;
         for (let i of Object.values(sections)) {
@@ -158,6 +191,9 @@ class OpParse extends AjaxOpByTitle
                 seeAlsoIndex = i.index;
                 break;
             }
+        }
+        if(seeAlsoIndex !== undefined) {
+            new OpSectionLinks(this.explorer, this.title, seeAlsoIndex).run();
         }
     }
 }
@@ -192,6 +228,8 @@ class Explorer
         Object.values(this.articles).forEach(i => console.log(i.linksTo));
         console.log("Outgoing links: \n");
         Object.values(this.articles).forEach(i => console.log(i.linksFrom));
+        console.log("Outgoing links from 'See Also': \n");
+        Object.values(this.articles).forEach(i => console.log(i.linksFromSeeAlso));
         console.log("Categories: \n");
         Object.values(this.articles).forEach(i => console.log(i.categories));
    }
