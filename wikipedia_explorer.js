@@ -88,15 +88,22 @@ class OpLinksTo extends AjaxOp
     
     onDone(data) {
         const article = this.explorer.articles[this.title];
+        const getArticle = this.explorer.getArticle.bind(this.explorer);
 
         // Incoming links        
         const dqs = data.query.search;
-        dqs.forEach(i => article.linksTo.push(i.title));
+        dqs.forEach(function(i) {
+            article.linksTo.push(i.title);
+            getArticle(i.title).linksFrom.push(article.title);
+        });
 
         // Outgoing links
         const dqp = data.query.pages;
         const links = dqp[Object.keys(dqp)[0]].links;
-        links.forEach(i => article.linksFrom.push(i.title));
+        links.forEach(function(i) {
+            article.linksFrom.push(i.title);
+            getArticle(i.title).linksTo.push(article.title);
+        });
     }
 }
 
@@ -126,9 +133,18 @@ class Explorer
 
     onOperationComplete() {
         console.log("=============== END RESULT ===============\n");
-        console.log("Incoming links, by relevance: \n");
-        Object.values(this.articles).forEach(i => console.log(i.linksTo));
-        console.log("Outgoing links: \n");
-        Object.values(this.articles).forEach(i => console.log(i.linksFrom));
+        console.log(this);
+        // console.log("Incoming links, by relevance: \n");
+        // Object.values(this.articles).forEach(i => console.log(i.linksTo));
+        // console.log("Outgoing links: \n");
+        // Object.values(this.articles).forEach(i => console.log(i.linksFrom));
+    }
+
+    getArticle(title) {
+        if (!(this.articles[title])) {
+            return (this.articles[title] = new Article(title));
+        } else {
+            return this.articles[title];
+        }
     }
 }
