@@ -75,7 +75,7 @@ class OpLinksTo extends AjaxOp
                 // Incoming links
                 list: 'search',
                 srsearch: q,
-                srlimit: 20,
+                srlimit: 'max',
 
                 // Outgoing links
                 prop: 'links',
@@ -88,22 +88,15 @@ class OpLinksTo extends AjaxOp
     
     onDone(data) {
         const article = this.explorer.articles[this.title];
-        const getArticle = this.explorer.getArticle.bind(this.explorer);
 
         // Incoming links        
         const dqs = data.query.search;
-        dqs.forEach(function(i) {
-            article.linksTo.push(i.title);
-            getArticle(i.title).linksFrom.push(article.title);
-        });
+        dqs.forEach(i => article.linksTo.push(i.title));
 
         // Outgoing links
         const dqp = data.query.pages;
         const links = dqp[Object.keys(dqp)[0]].links;
-        links.forEach(function(i) {
-            article.linksFrom.push(i.title);
-            getArticle(i.title).linksTo.push(article.title);
-        });
+        links.forEach(i => article.linksFrom.push(i.title));
     }
 }
 
@@ -133,18 +126,9 @@ class Explorer
 
     onOperationComplete() {
         console.log("=============== END RESULT ===============\n");
-        console.log(this);
-        // console.log("Incoming links, by relevance: \n");
-        // Object.values(this.articles).forEach(i => console.log(i.linksTo));
-        // console.log("Outgoing links: \n");
-        // Object.values(this.articles).forEach(i => console.log(i.linksFrom));
-    }
-
-    getArticle(title) {
-        if (!(this.articles[title])) {
-            return (this.articles[title] = new Article(title));
-        } else {
-            return this.articles[title];
-        }
+        console.log("Incoming links, by relevance: \n");
+        Object.values(this.articles).forEach(i => console.log(i.linksTo));
+        console.log("Outgoing links: \n");
+        Object.values(this.articles).forEach(i => console.log(i.linksFrom));
     }
 }
