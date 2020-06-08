@@ -23,8 +23,16 @@ class AjaxOp
     constructor(explorer, ajaxConfig) {
         if(!explorer) { throw new Error("explorer empty"); }
         this.explorer = explorer;
+
         if(!ajaxConfig) { throw new Error("ajaxConfig empty"); }
         this.ajaxConfig = ajaxConfig;
+
+        const cfg = this.ajaxConfig;        
+        cfg.data.format = 'json';
+        cfg.data.origin = '*';
+        cfg.xhrFields = {};
+        cfg.xhrFields.withCredentials = false;
+        cfg.dataType = 'json';
     }
 
     run() {
@@ -60,15 +68,8 @@ class Explorer {
                 action: 'query',
                 list: 'search',
                 srsearch: title,
-                format: 'json',
-                formatversion: 2,
-                origin: '*',
                 srlimit: 20
-            },
-            xhrFields: {
-                withCredentials: false
-            },
-            dataType: 'json'
+            }
         }).run();
     }
 
