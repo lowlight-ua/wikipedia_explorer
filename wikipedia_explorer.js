@@ -7,6 +7,7 @@ let expl = {};
 class Article {
     title;
     linksTo = [];
+    linksFrom = [];
 
     constructor(value) {
         if(!value) { throw new Error("Empty title"); }
@@ -47,7 +48,7 @@ class AjaxOp
 
 // ----------------------------------------------------------------------------
 
-class OpIncomingLinks extends AjaxOp {
+class OpLinksTo extends AjaxOp {
     title;
 
     constructor(explorer) {
@@ -78,6 +79,38 @@ class OpIncomingLinks extends AjaxOp {
     }
 }
 
+// ----------------------------------------------------------------------------
+
+class OpLinksFrom extends AjaxOp {
+    title;
+
+    constructor(explorer) {
+        super(explorer);
+    }
+
+    run(title) {
+        if(!title) { throw new Error("Empty title"); }
+        this.title = title;
+
+        super.run({
+            data: {
+                action: 'query',
+                prop: 'links',
+                titles: title,
+                plnamespace: 0,
+                pllimit: 'max'
+            }
+        });
+    }
+
+    onDone(data) {
+        const dqp = data.query.pages;
+        const links = dqp[Object.keys(dqp)[0]].links;
+        const article = this.explorer.articles[this.title];
+        links.forEach(i => article.linksFrom.push(i.title));
+    }
+}
+
 // ============================================================================
 
 class Explorer {
@@ -88,7 +121,8 @@ class Explorer {
 
     run(title) {
         this.articles[title] = new Article(title);
-        new OpIncomingLinks(this).run(title);
+        new OpLinksTo(this).run(title);
+        new OpLinksFrom(this).run(title);
     }
 
     onStepBegin() {
@@ -104,5 +138,7 @@ class Explorer {
         console.log("=============== END RESULT ===============\n");
         console.log("Incoming links, by relevance: \n");
         Object.values(this.articles).forEach(i => console.log(i.linksTo));
+        console.log("Outgoing links: \n");
+        Object.values(this.articles).forEach(i => console.log(i.linksFrom));
     }
 }
