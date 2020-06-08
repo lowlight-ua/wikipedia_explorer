@@ -19,7 +19,7 @@ class Article
     }
 }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 // Any jquery ajax operation, based on raw query configuration.
 
@@ -65,7 +65,7 @@ class AjaxOpByTitle extends AjaxOp
     }
 }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 class OpQuery extends AjaxOpByTitle 
 {
@@ -74,8 +74,6 @@ class OpQuery extends AjaxOpByTitle
     }
 
     run() {
-        // Incoming links
-
         // Todo: sanitize title to not interfere with the regexp
         const title = this.title;
         const q = 'insource:/"[[' + title + '"/ linksto:"' + title + '"';
@@ -140,7 +138,7 @@ class OpQuery extends AjaxOpByTitle
     }
 }
 
-// ----------------------------------------------------------------------------
+// ============================================================================
 
 class OpSectionLinks extends AjaxOpByTitle
 {
@@ -198,12 +196,14 @@ class OpParse extends AjaxOpByTitle
     onDone(data) {
         const sections = data.parse.sections;
         let seeAlsoIndex = undefined;
+
         for (let i of Object.values(sections)) {
             if(i.line === "See also") {
                 seeAlsoIndex = i.index;
                 break;
             }
         }
+
         if(seeAlsoIndex !== undefined) {
             new OpSectionLinks(this.explorer, this.title, seeAlsoIndex).run();
         }
