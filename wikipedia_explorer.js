@@ -57,11 +57,15 @@ class OpIncomingLinks extends AjaxOp {
     run(title) {
         if(!title) { throw new Error("Empty title"); }
         this.title = title;
+
+        // Todo: sanitize title to not interfere with the regexp
+        const q = 'insource:/"[[' + title + '"/ linksto:"' + title + '"';
+        
         super.run({
             data: {
                 action: 'query',
                 list: 'search',
-                srsearch: title,
+                srsearch: q,
                 srlimit: 20
             }
         });
