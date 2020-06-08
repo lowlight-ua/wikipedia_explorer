@@ -52,14 +52,23 @@ class AjaxOp
 
 // ----------------------------------------------------------------------------
 
-class OpLinksTo extends AjaxOp 
+class AjaxOpByTitle extends AjaxOp
 {
     title;
-    
+
     constructor(explorer, title) {
         super(explorer);
         if(!title) { throw new Error("Empty title"); }
         this.title = title;
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+class OpLinksTo extends AjaxOpByTitle 
+{
+    constructor(explorer, title) {
+        super(explorer, title);
     }
 
     run() {
