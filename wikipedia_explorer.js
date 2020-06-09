@@ -107,7 +107,8 @@ class ApiCall_Query1 extends ApiCallByTitle
 
                 // -----------------------------------
 
-                // Incoming links (list: 'search')
+                // Incoming links (list: 'search'). 
+                // Pre-sorted by relevance.
                 srsearch: q,
                 srnamespace: 0,
                 srlimit: 50,
@@ -169,7 +170,7 @@ class ApiCall_Query2 extends ApiCallByTitle
             data: {
                 action: 'query',
                 list: 'search',                 
-                srsearch: title,
+                srsearch: 'morelike:' + title,
                 srlimit: 50,
             }
         });
