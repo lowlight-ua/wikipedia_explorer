@@ -38,4 +38,11 @@ class WikiData
         artTarget.linksTo.push(strSource);
         this.touchArticle(strSource);
     }
+
+    addLinkFrom(artSource, strTarget) {
+        artSource.linksFrom.push(strTarget);
+        
+        // don't do it for now
+        // this.touchArticle(strTarget);
+    }
 }

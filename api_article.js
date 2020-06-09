@@ -113,7 +113,7 @@ class ApiCall_Query1 extends ApiCallByTitle
 
         // Outgoing links
         const links = dqp0.links;
-        links.forEach(i => article.linksFrom.push(i.title));
+        links.forEach(i => wikiData.addLinkFrom(article, i.title));
 
         // Categories
         const categories = dqp0.categories;

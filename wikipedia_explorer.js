@@ -30,19 +30,19 @@ class Explorer
     onOperationComplete() {
         console.log(this);
 
-        // console.log("=============== END RESULT ===============\n");
-        // console.log("Incoming links, by relevance: \n");
-        // Object.values(this.data.articles).forEach(i => console.log(i.linksTo));
-        // console.log("Outgoing links: \n");
-        // Object.values(this.data.articles).forEach(i => console.log(i.linksFrom));
-        // console.log("Outgoing links from 'See Also': \n");
-        // Object.values(this.data.articles).forEach(i => console.log(i.linksFromSeeAlso));
-        // console.log("Related links coming from search: \n");
-        // Object.values(this.data.articles).forEach(i => console.log(i.moreLike));
-        // console.log("Categories: \n");
-        // Object.values(this.data.articles).forEach(i => console.log(i.categories));
-        // console.log("Wikiprojects and assessments:");
-        // Object.values(this.data.articles).forEach(i => console.log(i.assessments));
+        console.log("=============== END RESULT ===============\n");
+        console.log("Incoming links, by relevance: \n");
+        Object.values(this.data.articles).forEach(i => console.log(i.linksTo));
+        console.log("Outgoing links: \n");
+        Object.values(this.data.articles).forEach(i => console.log(i.linksFrom));
+        console.log("Outgoing links from 'See Also': \n");
+        Object.values(this.data.articles).forEach(i => console.log(i.linksFromSeeAlso));
+        console.log("Related links coming from search: \n");
+        Object.values(this.data.articles).forEach(i => console.log(i.moreLike));
+        console.log("Categories: \n");
+        Object.values(this.data.articles).forEach(i => console.log(i.categories));
+        console.log("Wikiprojects and assessments:");
+        Object.values(this.data.articles).forEach(i => console.log(i.assessments));
     }
 
 }
