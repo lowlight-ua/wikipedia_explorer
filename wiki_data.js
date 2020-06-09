@@ -51,6 +51,9 @@ class WikiData
         this.touchArticle(strRelated);
     }
 
-    
+    addLinkFromSeeAlso(article, strRelated) {
+        article.linksFromSeeAlso.push(strRelated);
+        this.touchArticle(strRelated);
+    }
 
 }

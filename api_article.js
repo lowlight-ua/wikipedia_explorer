@@ -186,10 +186,11 @@ class ApiCall_SectionLinks extends ApiCallByTitle
     onDone(data) {
         console.log(data);
         const links = data.parse.links;
-        const article = this.explorer.data.articles[this.title];
+        const wikiData = this.explorer.data;
+        const article = wikiData.articles[this.title];
         links.forEach(function(i) { 
             if(i.ns === 0 && i.exists !== undefined) {
-                article.linksFromSeeAlso.push(i['*']);
+                wikiData.addLinkFromSeeAlso(article, i['*']);
             }
         });
     }
