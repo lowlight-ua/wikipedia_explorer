@@ -7,12 +7,12 @@ let expl = {};
 class Explorer 
 {
     constructor() {
-        this.articles = {};
+        this.data = new WikiData();
         this.steps = 0;
     }
 
     run(title) {
-        this.articles[title] = new Article(title);
+        this.data.articles[title] = new Article(title);
         new ApiCall_Query1(this, title).run();
         new ApiCall_Query2(this, title).run();
         new ApiCall_Parse(this, title).run();
@@ -32,23 +32,17 @@ class Explorer
 
         console.log("=============== END RESULT ===============\n");
         console.log("Incoming links, by relevance: \n");
-        Object.values(this.articles).forEach(i => console.log(i.linksTo));
+        Object.values(this.data.articles).forEach(i => console.log(i.linksTo));
         console.log("Outgoing links: \n");
-        Object.values(this.articles).forEach(i => console.log(i.linksFrom));
+        Object.values(this.data.articles).forEach(i => console.log(i.linksFrom));
         console.log("Outgoing links from 'See Also': \n");
-        Object.values(this.articles).forEach(i => console.log(i.linksFromSeeAlso));
+        Object.values(this.data.articles).forEach(i => console.log(i.linksFromSeeAlso));
         console.log("Related links coming from search: \n");
-        Object.values(this.articles).forEach(i => console.log(i.moreLike));
+        Object.values(this.data.articles).forEach(i => console.log(i.moreLike));
         console.log("Categories: \n");
-        Object.values(this.articles).forEach(i => console.log(i.categories));
+        Object.values(this.data.articles).forEach(i => console.log(i.categories));
         console.log("Wikiprojects and assessments:");
-        Object.values(this.articles).forEach(i => console.log(i.assessments));
+        Object.values(this.data.articles).forEach(i => console.log(i.assessments));
     }
 
-    article(title) {
-        if (!this.articles[title]) {
-            this.articles[title] = new Article(title);
-        }
-        return this.articles[title];
-    }
 }

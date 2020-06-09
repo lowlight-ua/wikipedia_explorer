@@ -21,3 +21,15 @@ class Article
         this.title = value;
     }
 }
+
+class WikiData
+{
+    articles = {};
+
+    article(title) {
+        if (!this.articles[title]) {
+            this.articles[title] = new Article(title);
+        }
+        return this.articles[title];
+    }
+}

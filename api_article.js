@@ -102,7 +102,7 @@ class ApiCall_Query1 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const article = this.explorer.articles[this.title];
+        const article = this.explorer.data.articles[this.title];
         const dqs = data.query.search;
         const dqp = data.query.pages;
         const dqp0 = dqp[Object.keys(dqp)[0]];
@@ -149,7 +149,7 @@ class ApiCall_Query2 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const article = this.explorer.articles[this.title];
+        const article = this.explorer.data.articles[this.title];
         const dqs = data.query.search;
         dqs.forEach(i => article.moreLike.push(i.title));
     }}
@@ -184,7 +184,7 @@ class ApiCall_SectionLinks extends ApiCallByTitle
     onDone(data) {
         console.log(data);
         const links = data.parse.links;
-        const article = this.explorer.articles[this.title];
+        const article = this.explorer.data.articles[this.title];
         links.forEach(function(i) { 
             if(i.ns === 0 && i.exists !== undefined) {
                 article.linksFromSeeAlso.push(i['*']);
