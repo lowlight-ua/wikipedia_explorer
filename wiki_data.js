@@ -45,4 +45,12 @@ class WikiData
         // don't do it for now
         // this.touchArticle(strTarget);
     }
+
+    addMoreLike(article, strRelated) {
+        article.moreLike.push(strRelated);
+        this.touchArticle(strRelated);
+    }
+
+    
+
 }

@@ -150,9 +150,10 @@ class ApiCall_Query2 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const article = this.explorer.data.articles[this.title];
+        const wikiData = this.explorer.data;
+        const article = wikiData.articles[this.title];
         const dqs = data.query.search;
-        dqs.forEach(i => article.moreLike.push(i.title));
+        dqs.forEach(i => wikiData.addMoreLike(article, i.title));
     }}
 
 // ============================================================================
