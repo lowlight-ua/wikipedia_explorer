@@ -151,7 +151,7 @@ class ApiCall_Query2 extends ApiCallByTitle
     onDone(data) {
         const article = this.explorer.articles[this.title];
         const dqs = data.query.search;
-        dqs.forEach(i => article.linksSearch.push(i.title));
+        dqs.forEach(i => article.moreLike.push(i.title));
     }}
 
 // ============================================================================

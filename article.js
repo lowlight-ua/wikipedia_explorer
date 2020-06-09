@@ -10,7 +10,7 @@ class Article
     // Links from this article, only from "see also" section.
     linksFromSeeAlso = [];
     // Links that the search finds when we search for the article title.
-    linksSearch = [];
+    moreLike = [];
     // Categories that the artile belongs to.
     categories = [];
     // "Page assessments", includes wikiproject information.
