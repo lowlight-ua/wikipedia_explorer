@@ -7,10 +7,17 @@ let expl = {};
 class Article 
 {
     title;
+    // Incoming links into this article, except from transcluded content.
     linksTo = [];
+    // Links from this article.
     linksFrom = [];
+    // Links from this article, only from "see also" section.
     linksFromSeeAlso = [];
+    // Links that the search finds when we search for the article title.
+    linksSearch = [];
+    // Categories that the artile belongs to.
     categories = [];
+    // "Page assessments", includes wikiproject information.
     assessments = {};
 
     constructor(value) {
@@ -21,9 +28,9 @@ class Article
 
 // ============================================================================
 
-// Any jquery ajax operation, based on raw query configuration.
+// Any jquery-based Wikimedia API call, based on raw query configuration.
 
-class AjaxOp
+class ApiCall
 {
     explorer;
 
@@ -54,7 +61,9 @@ class AjaxOp
 
 // ----------------------------------------------------------------------------
 
-class AjaxOpByTitle extends AjaxOp
+// API call, configured by an article title. Abstract, unusable directly.
+
+class ApiCallByTitle extends ApiCall
 {
     title;
 
@@ -67,7 +76,10 @@ class AjaxOpByTitle extends AjaxOp
 
 // ============================================================================
 
-class OpQuery extends AjaxOpByTitle 
+// Combined API call for all requests that can be fulfilled via the "query"
+// module of Wikimedia API. It's combined for performance reasons.
+
+class ApiCall_Query1 extends ApiCallByTitle 
 {
     constructor(explorer, title) {
         super(explorer, title);
@@ -97,7 +109,8 @@ class OpQuery extends AjaxOpByTitle
 
                 // Incoming links (list: 'search')
                 srsearch: q,
-                srlimit: 'max',
+                srnamespace: 0,
+                srlimit: 50,
 
                 // Outgoing links (prop: 'links')
                 plnamespace: 0,
@@ -133,14 +146,46 @@ class OpQuery extends AjaxOpByTitle
         categories.forEach(i => article.categories.push(i.title));
 
         // Page assessments
-        const ass = dqp0.pageassessments;   
+        const ass = dqp0.pageassessments;    // ;)
         article.assessments = ass;
     }
 }
 
+// ----------------------------------------------------------------------------
+
+// Another "query"-based API call, with requests that cannot be combined with the
+// first one.
+
+class ApiCall_Query2 extends ApiCallByTitle 
+{
+    constructor(explorer, title) {
+        super(explorer, title);
+    }
+
+    run() {
+        const title = this.title;
+        
+        super.run({
+            data: {
+                action: 'query',
+                list: 'search',                 
+                srsearch: title,
+                srlimit: 50,
+            }
+        });
+    }
+    
+    onDone(data) {
+        const article = this.explorer.articles[this.title];
+        const dqs = data.query.search;
+        dqs.forEach(i => article.linksSearch.push(i.title));
+    }}
+
 // ============================================================================
 
-class OpSectionLinks extends AjaxOpByTitle
+// A sub-API-call for the ApiCall_Parse API call. Gets links from a specific section.
+
+class ApiCall_SectionLinks extends ApiCallByTitle
 {
     sectionIndex;
 
@@ -177,7 +222,10 @@ class OpSectionLinks extends AjaxOpByTitle
 
 // ----------------------------------------------------------------------------
 
-class OpParse extends AjaxOpByTitle 
+// Combined API call for all requests that can be fulfilled via the "parse"
+// module of Wikimedia API. It's combined for performance reasons.
+
+class ApiCall_Parse extends ApiCallByTitle 
 {
     constructor(explorer, title) {
         super(explorer, title);
@@ -205,7 +253,7 @@ class OpParse extends AjaxOpByTitle
         }
 
         if(seeAlsoIndex !== undefined) {
-            new OpSectionLinks(this.explorer, this.title, seeAlsoIndex).run();
+            new ApiCall_SectionLinks(this.explorer, this.title, seeAlsoIndex).run();
         }
     }
 }
@@ -221,8 +269,9 @@ class Explorer
 
     run(title) {
         this.articles[title] = new Article(title);
-        new OpQuery(this, title).run();
-        new OpParse(this, title).run();
+        new ApiCall_Query1(this, title).run();
+        new ApiCall_Query2(this, title).run();
+        new ApiCall_Parse(this, title).run();
     }
 
     onStepBegin() {
@@ -242,6 +291,8 @@ class Explorer
         Object.values(this.articles).forEach(i => console.log(i.linksFrom));
         console.log("Outgoing links from 'See Also': \n");
         Object.values(this.articles).forEach(i => console.log(i.linksFromSeeAlso));
+        console.log("Related links coming from search: \n");
+        Object.values(this.articles).forEach(i => console.log(i.linksSearch));
         console.log("Categories: \n");
         Object.values(this.articles).forEach(i => console.log(i.categories));
         console.log("Wikiprojects and assessments:");
