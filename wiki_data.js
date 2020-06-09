@@ -22,14 +22,20 @@ class Article
     }
 }
 
+//-----------------------------------------------------------------------------
+
 class WikiData
 {
     articles = {};
 
-    article(title) {
+    touchArticle(title) {
         if (!this.articles[title]) {
             this.articles[title] = new Article(title);
         }
-        return this.articles[title];
+    }
+
+    addLinkTo(artTarget, strSource) {
+        artTarget.linksTo.push(strSource);
+        this.touchArticle(strSource);
     }
 }

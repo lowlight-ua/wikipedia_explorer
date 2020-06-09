@@ -102,13 +102,14 @@ class ApiCall_Query1 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const article = this.explorer.data.articles[this.title];
+        const wikiData = this.explorer.data;
+        const article = wikiData.articles[this.title];
         const dqs = data.query.search;
         const dqp = data.query.pages;
         const dqp0 = dqp[Object.keys(dqp)[0]];
 
         // Incoming links        
-        dqs.forEach(i => article.linksTo.push(i.title));
+        dqs.forEach(i => wikiData.addLinkTo(article, i.title));
 
         // Outgoing links
         const links = dqp0.links;
