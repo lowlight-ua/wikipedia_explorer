@@ -23,13 +23,13 @@ class ApiTransaction {
 class ApiCall
 {
     transaction;
-    explorer;
+    wikidata;
 
-    constructor(transaction, explorer) {
+    constructor(transaction, wikidata) {
         if(!transaction) { throw new Error("transaction empty"); }
-        if(!explorer) { throw new Error("explorer empty"); }
+        if(!wikidata) { throw new Error("wikidata empty"); }
         this.transaction = transaction;
-        this.explorer = explorer;
+        this.wikidata = wikidata;
     }
 
     run(ajaxConfig) {
@@ -60,8 +60,8 @@ class ApiCallByTitle extends ApiCall
 {
     title;
 
-    constructor(transaction, explorer, title) {
-        super(transaction, explorer);
+    constructor(transaction, wikidata, title) {
+        super(transaction, wikidata);
         if(!title) { throw new Error("Empty title"); }
         this.title = title;
     }

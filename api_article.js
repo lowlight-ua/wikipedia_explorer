@@ -3,8 +3,8 @@
 
 class ApiCall_Query1 extends ApiCallByTitle 
 {
-    constructor(transaction, explorer, title) {
-        super(transaction, explorer, title);
+    constructor(transaction, wikidata, title) {
+        super(transaction, wikidata, title);
     }
 
     run() {
@@ -52,7 +52,7 @@ class ApiCall_Query1 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const wikiData = this.explorer.data;
+        const wikiData = this.wikidata.data;
         const article = wikiData.articles[this.title];
         const dqs = data.query.search;
         const dqp = data.query.pages;
@@ -82,8 +82,8 @@ class ApiCall_Query1 extends ApiCallByTitle
 
 class ApiCall_Query2 extends ApiCallByTitle 
 {
-    constructor(transaction, explorer, title) {
-        super(transaction, explorer, title);
+    constructor(transaction, wikidata, title) {
+        super(transaction, wikidata, title);
     }
 
     run() {
@@ -100,7 +100,7 @@ class ApiCall_Query2 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const wikiData = this.explorer.data;
+        const wikiData = this.wikidata.data;
         const article = wikiData.articles[this.title];
         const dqs = data.query.search;
         dqs.forEach(i => wikiData.addMoreLike(article, i.title));
@@ -114,8 +114,8 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 {
     sectionIndex;
 
-    constructor(transaction, explorer, title, sectionIndex) {
-        super(transaction, explorer, title);
+    constructor(transaction, wikidata, title, sectionIndex) {
+        super(transaction, wikidata, title);
         if (!sectionIndex && sectionIndex !== 0) {
             throw new Error("sectionIndex not defined");
         }
@@ -136,7 +136,7 @@ class ApiCall_SectionLinks extends ApiCallByTitle
     onDone(data) {
         console.log(data);
         const links = data.parse.links;
-        const wikiData = this.explorer.data;
+        const wikiData = this.wikidata.data;
         const article = wikiData.articles[this.title];
         links.forEach(function(i) { 
             if(i.ns === 0 && i.exists !== undefined) {
@@ -153,8 +153,8 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 
 class ApiCall_Parse extends ApiCallByTitle 
 {
-    constructor(transaction, explorer, title) {
-        super(transaction, explorer, title);
+    constructor(transaction, wikidata, title) {
+        super(transaction, wikidata, title);
     }
 
     run() {
@@ -179,7 +179,7 @@ class ApiCall_Parse extends ApiCallByTitle
         }
 
         if(seeAlsoIndex !== undefined) {
-            new ApiCall_SectionLinks(this.transaction, this.explorer, this.title, seeAlsoIndex).run();
+            new ApiCall_SectionLinks(this.transaction, this.wikidata, this.title, seeAlsoIndex).run();
         }
     }
 }
