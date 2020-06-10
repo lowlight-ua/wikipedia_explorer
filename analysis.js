@@ -49,8 +49,11 @@ function analyze(model, title) {
             // Boost article if a deep category is the same
             a.categoriesDeep.forEach(function(i) {
                 if(article.categoriesDeep.has(i)) {
-                    console.log(a.title + " includes " + i);
-                    incr(relevant, a.title, 1, "category match");
+                    const gen = model.categories[i].generation;
+                    let score = 0;
+                    if (gen == -1) { score = 1; }
+                    else if(gen == -2) { score = 0.1; }
+                    incr(relevant, a.title, score, "category match");
                 }
             })
         }

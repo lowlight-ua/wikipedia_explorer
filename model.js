@@ -93,9 +93,7 @@ class Model
 
     articleLinkFrom(artSource, strTarget) {
         artSource.linksFrom.push(strTarget);
-        
-        // don't do it for now
-        // this.touchArticle(strTarget);
+        this.touchArticle(strTarget);
     }
 
     articleMoreLike(article, strRelated) {
@@ -125,7 +123,7 @@ class Model
         const parentCat = this.categories[parentTitle];
         parentCat.children.add(childCat.title);
         const thisObj = this;
-        ([...childCat.articles]).forEach(function(i) {
+        ([...childCat.articlesDeep]).forEach(function(i) {
             parentCat.articlesDeep.add(i);
             thisObj.articles[i].categoriesDeep.add(parentTitle);
         });
