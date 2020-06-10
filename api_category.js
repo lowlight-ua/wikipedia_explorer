@@ -11,13 +11,16 @@ class ApiCall_Categories extends ApiCallBase
         // max 50 per query
         let counter = 0;
         let titles="";
-        for (let title of Object.keys(this.model.articles)) {
-            titles += (counter ? "|" : "") + title;
-            counter++;
-            if(counter==50) {
-                this.query(titles);
-                titles = "";
-                counter = 0;
+        
+        for (let [title, article] of Object.entries(this.model.articles)) {
+            if(article.categories.length == 0) {
+                titles += (counter ? "|" : "") + title;
+                counter++;
+                if(counter==50) {
+                    this.query(titles);
+                    titles = "";
+                    counter = 0;
+                }
             }
         }
         this.query(titles);
@@ -37,6 +40,16 @@ class ApiCall_Categories extends ApiCallBase
     }
 
     onDone(data) {
-        console.log(data);
+        // console.log(data);
+        const qp = data.query.pages;
+        const model = this.model;
+        for (let page of Object.values(qp)) {
+            const title = page.title;
+            const article = model.articles[title];
+            const categories = page.categories;
+            if (categories) {
+                categories.forEach(i => model.articleCategories(article, i.title));
+            }
+        }
     }
 }

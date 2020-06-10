@@ -56,4 +56,12 @@ class Model
         article.linksFromSeeAlso.push(strRelated);
         this.touchArticle(strRelated);
     }
+
+    articleCategories(article, category) {
+        article.categories.push(category);
+        if (!this.categories[category]) {
+            this.categories[category] = new Set();
+        }    
+        this.categories[category].add(article.title);
+    }
 }
