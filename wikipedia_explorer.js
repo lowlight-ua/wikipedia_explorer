@@ -8,10 +8,10 @@ class Explorer
 {
     constructor() {
         this.model = new Model();
-        this.steps = 0;
     }
 
     run(title) {
+        this.title = title;
         this.model.articles[title] = new Article(title);
         const transaction = new ApiTransaction(this.onArticlesGathered.bind(this));
         new ApiCall_Query1(transaction, this.model, title).run();
@@ -26,6 +26,8 @@ class Explorer
 
     onCategoriesAssigned() {
         console.log(this.model);
+        const analysis = analyze(this.model, this.title);
+        console.log(analysis);
     }
 
 }

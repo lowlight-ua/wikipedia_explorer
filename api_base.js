@@ -47,10 +47,10 @@ class ApiCallBase
         this.transaction.onStepBegin();
         const thisObj = this;
         $.ajax(ajaxConfig).done(function(data, status) {
-            console.log("=====================================================");
-            console.log(cfg);
-            console.log(status);
-            console.log(data);
+            // console.log("=====================================================");
+            // console.log(cfg);
+            // console.log(status);
+            // console.log(data);
             thisObj.onDone(data, status);
             thisObj.transaction.onStepComplete();
         });
