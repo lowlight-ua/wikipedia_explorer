@@ -1,3 +1,6 @@
+// An API transaction represents a set of `ApiCallBase`s that run asynchronously in parallel.
+// The only point of a transaction is the ability to notify `onComplete` when the last call finishes.
+
 class ApiTransaction {
     steps = 0;
     onComplete;

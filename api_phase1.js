@@ -2,7 +2,8 @@
 
 // In this file:
 // API calls associated with the first phase of data collection: gather information
-// about the focused article.
+// about the focused article. This phase discovers related articles and categories,
+// which will be used in phase2.
 
 // ----------------------------------------------------------------------------
 

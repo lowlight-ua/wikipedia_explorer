@@ -14,6 +14,7 @@ class Explorer
         // Title of the focused article, i.e. the article that is entered into the text box.
         this.title = title;
 
+        // Phase 1: gather information about the focused article.
         this.model.articles[title] = new Article(title);
         const transaction = new ApiTransaction(this.onArticlesGathered.bind(this));
         new ApiCall_Query1(transaction, this.model, title).run();
