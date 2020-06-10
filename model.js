@@ -5,8 +5,12 @@
 class Category
 {
     title;
-    parents;
-    children;
+
+    articles = new Set();
+    parents = new Set();
+    children = new Set();
+
+    constructor(title) { this.title = title; }
 }
 
 //-----------------------------------------------------------------------------
@@ -82,8 +86,8 @@ class Model
     articleCategories(article, category) {
         article.categories.push(category);
         if (!this.categories[category]) {
-            this.categories[category] = new Set();
+            this.categories[category] = new Category(category);
         }    
-        this.categories[category].add(article.title);
+        this.categories[category].articles.add(article.title);
     }
 }
