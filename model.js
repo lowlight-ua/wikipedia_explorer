@@ -11,9 +11,16 @@ class Category
     // Positive: generations of descendant categories.
     generation; 
 
+    // All articles in this category
     articles = new Set();
+
+    // All articles in this category and its descendants
     articlesDeep = new Set();
+
+    // Parent categories
     parents = new Set();
+    
+    // Child categorues
     children = new Set();
 
     constructor(title, generation = 0) { 
