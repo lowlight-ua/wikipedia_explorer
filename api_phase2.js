@@ -15,21 +15,27 @@ class ApiCall_Categories extends ApiCallBase
 
     run() {
         // max 50 per query
-        let counter = 0;
-        let titles="";
+        let titles = [];
         
         for (let [title, article] of Object.entries(this.model.articles)) {
             if(article.categories.length == 0) {
-                titles += (counter ? "|" : "") + title;
-                counter++;
-                if(counter==50) {
-                    this.query(titles);
-                    titles = "";
-                    counter = 0;
-                }
+                titles.push(title);
             }
         }
-        this.query(titles);
+
+        let titleString = "";
+        let counter = 0;
+        for (let i = 0; i < titles.length; i++) {
+            const title = titles[i];
+            titleString += (counter ? "|" : "") + title;
+            counter++;
+            if(counter == 50) {
+                this.query(titleString);
+                titleString = "";
+                counter = 0;
+            }
+        }
+        this.query(titleString);
     }
 
     query(titles) {

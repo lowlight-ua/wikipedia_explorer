@@ -6,9 +6,14 @@
 
 class ApiCall_CategoryParents extends ApiCallBase
 {
+    generation; 
+
     constructor(transaction, model, generation) {
         super(transaction, model);
         this.generation = generation;
+    }
+
+    run() {
     }
 }
 
