@@ -59,11 +59,11 @@ class ApiCall_Query1 extends ApiCallByTitle
         const dqp0 = dqp[Object.keys(dqp)[0]];
 
         // Incoming links        
-        dqs.forEach(i => model.addLinkTo(article, i.title));
+        dqs.forEach(i => model.articleLinkTo(article, i.title));
 
         // Outgoing links
         const links = dqp0.links;
-        links.forEach(i => model.addLinkFrom(article, i.title));
+        links.forEach(i => model.articleLinkFrom(article, i.title));
 
         // Categories
         const categories = dqp0.categories;
@@ -103,7 +103,7 @@ class ApiCall_Query2 extends ApiCallByTitle
         const model = this.model;
         const article = model.articles[this.title];
         const dqs = data.query.search;
-        dqs.forEach(i => model.addMoreLike(article, i.title));
+        dqs.forEach(i => model.articleMoreLike(article, i.title));
     }}
 
 // ============================================================================
@@ -140,7 +140,7 @@ class ApiCall_SectionLinks extends ApiCallByTitle
         const article = model.articles[this.title];
         links.forEach(function(i) { 
             if(i.ns === 0 && i.exists !== undefined) {
-                model.addLinkFromSeeAlso(article, i['*']);
+                model.articleLinkFromSeeAlso(article, i['*']);
             }
         });
     }

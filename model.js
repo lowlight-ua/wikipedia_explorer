@@ -27,6 +27,7 @@ class Article
 class Model
 {
     articles = {};
+    categories = {};
 
     touchArticle(title) {
         if (!this.articles[title]) {
@@ -34,24 +35,24 @@ class Model
         }
     }
 
-    addLinkTo(artTarget, strSource) {
+    articleLinkTo(artTarget, strSource) {
         artTarget.linksTo.push(strSource);
         this.touchArticle(strSource);
     }
 
-    addLinkFrom(artSource, strTarget) {
+    articleLinkFrom(artSource, strTarget) {
         artSource.linksFrom.push(strTarget);
         
         // don't do it for now
         // this.touchArticle(strTarget);
     }
 
-    addMoreLike(article, strRelated) {
+    articleMoreLike(article, strRelated) {
         article.moreLike.push(strRelated);
         this.touchArticle(strRelated);
     }
 
-    addLinkFromSeeAlso(article, strRelated) {
+    articleLinkFromSeeAlso(article, strRelated) {
         article.linksFromSeeAlso.push(strRelated);
         this.touchArticle(strRelated);
     }
