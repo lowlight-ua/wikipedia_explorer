@@ -20,7 +20,7 @@ class ApiTransaction {
 
 // Any jquery-based Wikimedia API call, based on raw query configuration.
 
-class ApiCall
+class ApiCallBase
 {
     transaction;
     model;
@@ -44,10 +44,10 @@ class ApiCall
         cfg.dataType = 'json';
 
         this.transaction.onStepBegin();
-        const thisOp = this;
+        const thisObj = this;
         $.ajax(ajaxConfig).done(function(data, status) {
-            thisOp.onDone(data, status)
-            thisOp.transaction.onStepComplete();
+            thisObj.onDone(data, status)
+            thisObj.transaction.onStepComplete();
         });
     }
 }
@@ -56,7 +56,7 @@ class ApiCall
 
 // API call, configured by an article title. Abstract, unusable directly.
 
-class ApiCallByTitle extends ApiCall
+class ApiCallByTitle extends ApiCallBase
 {
     title;
 
