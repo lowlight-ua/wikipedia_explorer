@@ -19,15 +19,6 @@ class Explorer
         new ApiCall_Parse(transaction, this.model, title).run();
     }
 
-    onStepBegin() {
-        this.steps++;
-    }
-
-    onStepComplete() {
-        this.steps--;
-        if (this.steps == 0) { this.onTransactionComplete(); }
-    }
-
     onTransactionComplete() {
         console.log(this.model);
     }
