@@ -56,5 +56,4 @@ class Model
         article.linksFromSeeAlso.push(strRelated);
         this.touchArticle(strRelated);
     }
-
 }

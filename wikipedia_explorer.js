@@ -20,9 +20,9 @@ class Explorer
     }
 
     onArticlesGathered() {
-        //console.log(this.model);
-        const transaction = new ApiTransaction(this.onCategoriesAssigned.bind(this)); 
-        new ApiCall_Categories(transaction, this.model).run();
+        console.log(this.model);
+        //const transaction = new ApiTransaction(this.onCategoriesAssigned.bind(this)); 
+        //new ApiCall_Categories(transaction, this.model).run();
     }
 
     onCategoriesAssigned() {

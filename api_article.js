@@ -24,7 +24,7 @@ class ApiCall_Query1 extends ApiCallByTitle
                 list: 'search',                 
 
                 // For all prop-based queries
-                prop: 'links|categories|pageassessments',
+                prop: 'links|pageassessments',
                 titles: this.title, 
 
                 // -----------------------------------
@@ -38,10 +38,6 @@ class ApiCall_Query1 extends ApiCallByTitle
                 // Outgoing links (prop: 'links')
                 plnamespace: 0,
                 pllimit: 'max',
-
-                // Categories (prop: 'categories')
-                clshow: '!hidden',
-                cllimit: 'max',
 
                 // Page assessments (prop: you guessed it)
                 palimit: 'max'
@@ -64,10 +60,6 @@ class ApiCall_Query1 extends ApiCallByTitle
         // Outgoing links
         const links = dqp0.links;
         links.forEach(i => model.articleLinkFrom(article, i.title));
-
-        // Categories
-        const categories = dqp0.categories;
-        categories.forEach(i => article.categories.push(i.title));
 
         // Page assessments
         const ass = dqp0.pageassessments;    // ;)
