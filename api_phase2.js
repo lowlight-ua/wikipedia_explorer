@@ -4,7 +4,7 @@
 
 // ----------------------------------------------------------------------------
 
-// Get categories for anyl articles in transaction.model 
+// Get categories for any articles in `Model`
 // that doesn't have categories defined yet.
 
 class ApiCall_Categories extends ApiCallBase

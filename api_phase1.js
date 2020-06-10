@@ -88,7 +88,6 @@ class ApiCall_Query1 extends ApiCallByTitle
 // first one.
 // Obtains for the focused article (of 'title'):
 // - List of relevant articles, sorted by relevance.
-// Creates article objects in `Model` for referenced articles.
 // Creates article and category objects in `Model` for referenced articles and categories.
 
 class ApiCall_Query2 extends ApiCallByTitle 
@@ -164,6 +163,7 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 // Obtains for the focused article (of 'title'):
 // - Sections, and finds "see also" section;
 // - Links outgoing from the "see also" section.
+// Creates article and category objects in `Model` for referenced articles and categories.
 
 class ApiCall_Parse extends ApiCallByTitle 
 {
