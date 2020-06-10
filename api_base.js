@@ -39,6 +39,7 @@ class ApiCallBase
         cfg.url = 'https://en.wikipedia.org/w/api.php',    
         cfg.data.format = 'json';
         cfg.data.origin = '*';
+        cfg.data.redirects = 1;
         cfg.xhrFields = {};
         cfg.xhrFields.withCredentials = false;
         cfg.dataType = 'json';
@@ -46,7 +47,11 @@ class ApiCallBase
         this.transaction.onStepBegin();
         const thisObj = this;
         $.ajax(ajaxConfig).done(function(data, status) {
-            thisObj.onDone(data, status)
+            console.log("=====================================================");
+            console.log(cfg);
+            console.log(status);
+            console.log(data);
+            thisObj.onDone(data, status);
             thisObj.transaction.onStepComplete();
         });
     }

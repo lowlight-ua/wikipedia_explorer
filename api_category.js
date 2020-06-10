@@ -27,7 +27,6 @@ class ApiCall_Categories extends ApiCallBase
     }
 
     query(titles) {
-        // console.log(titles);
         super.run({
             data: {
                 action: 'query',
@@ -40,15 +39,16 @@ class ApiCall_Categories extends ApiCallBase
     }
 
     onDone(data) {
-        // console.log(data);
         const qp = data.query.pages;
         const model = this.model;
         for (let page of Object.values(qp)) {
             const title = page.title;
             const article = model.articles[title];
-            const categories = page.categories;
-            if (categories) {
-                categories.forEach(i => model.articleCategories(article, i.title));
+            if(article) {
+                const categories = page.categories;
+                if (categories) {
+                    categories.forEach(i => model.articleCategories(article, i.title));
+                }
             }
         }
     }

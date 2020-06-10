@@ -126,7 +126,6 @@ class ApiCall_SectionLinks extends ApiCallByTitle
     }
 
     onDone(data) {
-        console.log(data);
         const links = data.parse.links;
         const model = this.model;
         const article = model.articles[this.title];
