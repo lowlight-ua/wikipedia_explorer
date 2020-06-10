@@ -37,12 +37,20 @@ function analyze(model, title) {
         incr(relevant, article.linksFrom[i], 1, "in linksFrom");
     }
 
-    // Boost article if a category is the same
+    // Boost articles based on categories
     for (let a of Object.values(model.articles)) {
         if(a!=article) {
+            // Boost article if a direct category is the same
             a.categories.forEach(function(i) {
                 if(article.categories.includes(i)) {
-                    incr(relevant, a.title, 4, "category match");
+                    incr(relevant, a.title, 3, "category match");
+                }
+            })
+            // Boost article if a deep category is the same
+            a.categoriesDeep.forEach(function(i) {
+                if(article.categoriesDeep.has(i)) {
+                    console.log(a.title + " includes " + i);
+                    incr(relevant, a.title, 1, "category match");
                 }
             })
         }

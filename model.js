@@ -109,11 +109,14 @@ class Model
     }
 
     articleCategories(article, category) {
-        article.categories.push(category);
-        article.categoriesDeep.add(category);
-        this.touchCategory(category);
-        this.categories[category].articles.add(article.title);
-        this.categories[category].articlesDeep.add(article.title);
+        if(category.indexOf('stub') == -1 &&
+        category.indexOf('isambigua') == -1) {
+            article.categories.push(category);
+            article.categoriesDeep.add(category);
+            this.touchCategory(category);
+            this.categories[category].articles.add(article.title);
+            this.categories[category].articlesDeep.add(article.title);    
+        }
     }
 
     categoryParents(childCat, parentTitle, newGeneration) {
