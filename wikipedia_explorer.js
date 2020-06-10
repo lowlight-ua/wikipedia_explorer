@@ -13,14 +13,20 @@ class Explorer
 
     run(title) {
         this.model.articles[title] = new Article(title);
-        const transaction = new ApiTransaction(this.onTransactionComplete.bind(this));
+        const transaction = new ApiTransaction(this.onArticlesGathered.bind(this));
         new ApiCall_Query1(transaction, this.model, title).run();
         new ApiCall_Query2(transaction, this.model, title).run();
         new ApiCall_Parse(transaction, this.model, title).run();
     }
 
-    onTransactionComplete() {
+    onArticlesGathered() {
         console.log(this.model);
+        const transaction = new ApiTransaction(this.onCategoriesAssigned.bind(this)); 
+        new ApiCall_Categories(transaction, this.model).run();
+    }
+
+    onCategoriesAssigned() {
+        console.log("onCategoriesAssigned");
     }
 
 }

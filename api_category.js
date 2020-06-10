@@ -3,11 +3,10 @@
 
 class ApiCall_Categories extends ApiCallBase
 {
-    constructor(transaction) {
-        super(transaction);
+    constructor(transaction, model) {
+        super(transaction, model);
     }
 
     run() {
-        const model = this.transaction.model;
     }
 }
