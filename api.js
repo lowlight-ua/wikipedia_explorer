@@ -2,10 +2,8 @@ class ApiCaller {
     steps = 0;
     onComplete;
 
-    constructor(calls, onComplete) {
+    constructor(onComplete) {
         this.onComplete = onComplete;
-        calls.caller = this;
-        calls(this);
     }
 
     onStepBegin() {
@@ -25,10 +23,13 @@ class ApiCaller {
 class ApiCall
 {
     caller;
+    explorer;
 
-    constructor(caller) {
+    constructor(caller, explorer) {
         if(!caller) { throw new Error("caller empty"); }
+        if(!explorer) { throw new Error("explorer empty"); }
         this.caller = caller;
+        this.explorer = explorer;
     }
 
     run(ajaxConfig) {
@@ -59,8 +60,8 @@ class ApiCallByTitle extends ApiCall
 {
     title;
 
-    constructor(caller, title) {
-        super(caller);
+    constructor(caller, explorer, title) {
+        super(caller, explorer);
         if(!title) { throw new Error("Empty title"); }
         this.title = title;
     }

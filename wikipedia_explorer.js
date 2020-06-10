@@ -13,9 +13,10 @@ class Explorer
 
     run(title) {
         this.data.articles[title] = new Article(title);
-        new ApiCall_Query1(this, title).run();
-        new ApiCall_Query2(this, title).run();
-        new ApiCall_Parse(this, title).run();
+        const caller = new ApiCaller(this.onOperationComplete.bind(this));
+        new ApiCall_Query1(caller, this, title).run();
+        new ApiCall_Query2(caller, this, title).run();
+        new ApiCall_Parse(caller, this, title).run();
     }
 
     onStepBegin() {
@@ -28,7 +29,7 @@ class Explorer
     }
 
     onOperationComplete() {
-        console.log(this);
+        console.log(this.data);
     }
 
 }
