@@ -19,7 +19,7 @@ class Category
 
     // Parent categories
     parents = new Set();
-    
+
     // Child categorues
     children = new Set();
 
@@ -53,6 +53,9 @@ class Article
 
     // Categories that the artile belongs to. Array of titles (strings).
     categories = [];
+
+    // Categories that the artile belongs to, and all parents of the category.
+    categoriesDeep = new Set();
 
     // "Page assessments", includes wikiproject information.
     // Key = wikiproject; value object = page assessments.
@@ -107,6 +110,7 @@ class Model
 
     articleCategories(article, category) {
         article.categories.push(category);
+        article.categoriesDeep.add(category);
         this.touchCategory(category);
         this.categories[category].articles.add(article.title);
         this.categories[category].articlesDeep.add(article.title);
@@ -117,7 +121,11 @@ class Model
         this.touchCategory(parentTitle);
         const parentCat = this.categories[parentTitle];
         parentCat.children.add(childCat.title);
-        ([...childCat.articles]).forEach(i => parentCat.articlesDeep.add(i));
+        const thisObj = this;
+        ([...childCat.articles]).forEach(function(i) {
+            parentCat.articlesDeep.add(i);
+            thisObj.articles[i].categoriesDeep.add(parentTitle);
+        });
         parentCat.generation = newGeneration;
     }
 }
