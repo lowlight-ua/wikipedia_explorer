@@ -1,3 +1,9 @@
+// In this file:
+// API calls associated with the second phase of data collection: gather information
+// about all the articles and categories that were discovered during the first phase.
+
+// ----------------------------------------------------------------------------
+
 // Get categories for anyl articles in transaction.model 
 // that doesn't have categories defined yet.
 

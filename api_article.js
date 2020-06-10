@@ -1,5 +1,19 @@
+// ----------------------------------------------------------------------------
+
+// In this file:
+// API calls associated with the first phase of data collection: gather information
+// about the focused article.
+
+// ----------------------------------------------------------------------------
+
+
 // Combined API call for all requests that can be fulfilled via the "query"
 // module of Wikimedia API. It's combined for performance reasons.
+// Obtains for the focused article (of 'title'):
+// - Incoming links, sorted by relevance
+// - Outgoing links, unsorted
+// - "Page assessments" (WikiProject and article quality assessment).
+// Creates article and category objects in `Model` for referenced articles and categories.
 
 class ApiCall_Query1 extends ApiCallByTitle 
 {
@@ -71,6 +85,10 @@ class ApiCall_Query1 extends ApiCallByTitle
 
 // Another "query"-based API call, with requests that cannot be combined with the
 // first one.
+// Obtains for the focused article (of 'title'):
+// - List of relevant articles, sorted by relevance.
+// Creates article objects in `Model` for referenced articles.
+// Creates article and category objects in `Model` for referenced articles and categories.
 
 class ApiCall_Query2 extends ApiCallByTitle 
 {
@@ -100,7 +118,8 @@ class ApiCall_Query2 extends ApiCallByTitle
 
 // ============================================================================
 
-// A sub-API-call for the ApiCall_Parse API call. Gets links from a specific section.
+// A sub-API-call for the ApiCall_Parse API call. 
+// For the focused article, gets links from a specific section.
 
 class ApiCall_SectionLinks extends ApiCallByTitle
 {
@@ -141,6 +160,9 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 
 // Combined API call for all requests that can be fulfilled via the "parse"
 // module of Wikimedia API. It's combined for performance reasons.
+// Obtains for the focused article (of 'title'):
+// - Sections, and finds "see also" section;
+// - Links outgoing from the "see also" section.
 
 class ApiCall_Parse extends ApiCallByTitle 
 {
