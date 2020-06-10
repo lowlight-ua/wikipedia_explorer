@@ -3,8 +3,8 @@
 
 class ApiCall_Query1 extends ApiCallByTitle 
 {
-    constructor(transaction, wikidata, title) {
-        super(transaction, wikidata, title);
+    constructor(transaction, model, title) {
+        super(transaction, model, title);
     }
 
     run() {
@@ -52,18 +52,18 @@ class ApiCall_Query1 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const wikidata = this.wikidata;
-        const article = wikidata.articles[this.title];
+        const model = this.model;
+        const article = model.articles[this.title];
         const dqs = data.query.search;
         const dqp = data.query.pages;
         const dqp0 = dqp[Object.keys(dqp)[0]];
 
         // Incoming links        
-        dqs.forEach(i => wikidata.addLinkTo(article, i.title));
+        dqs.forEach(i => model.addLinkTo(article, i.title));
 
         // Outgoing links
         const links = dqp0.links;
-        links.forEach(i => wikidata.addLinkFrom(article, i.title));
+        links.forEach(i => model.addLinkFrom(article, i.title));
 
         // Categories
         const categories = dqp0.categories;
@@ -82,8 +82,8 @@ class ApiCall_Query1 extends ApiCallByTitle
 
 class ApiCall_Query2 extends ApiCallByTitle 
 {
-    constructor(transaction, wikidata, title) {
-        super(transaction, wikidata, title);
+    constructor(transaction, model, title) {
+        super(transaction, model, title);
     }
 
     run() {
@@ -100,10 +100,10 @@ class ApiCall_Query2 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const wikidata = this.wikidata;
-        const article = wikidata.articles[this.title];
+        const model = this.model;
+        const article = model.articles[this.title];
         const dqs = data.query.search;
-        dqs.forEach(i => wikidata.addMoreLike(article, i.title));
+        dqs.forEach(i => model.addMoreLike(article, i.title));
     }}
 
 // ============================================================================
@@ -114,8 +114,8 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 {
     sectionIndex;
 
-    constructor(transaction, wikidata, title, sectionIndex) {
-        super(transaction, wikidata, title);
+    constructor(transaction, model, title, sectionIndex) {
+        super(transaction, model, title);
         if (!sectionIndex && sectionIndex !== 0) {
             throw new Error("sectionIndex not defined");
         }
@@ -136,11 +136,11 @@ class ApiCall_SectionLinks extends ApiCallByTitle
     onDone(data) {
         console.log(data);
         const links = data.parse.links;
-        const wikidata = this.wikidata;
-        const article = wikidata.articles[this.title];
+        const model = this.model;
+        const article = model.articles[this.title];
         links.forEach(function(i) { 
             if(i.ns === 0 && i.exists !== undefined) {
-                wikidata.addLinkFromSeeAlso(article, i['*']);
+                model.addLinkFromSeeAlso(article, i['*']);
             }
         });
     }
@@ -153,8 +153,8 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 
 class ApiCall_Parse extends ApiCallByTitle 
 {
-    constructor(transaction, wikidata, title) {
-        super(transaction, wikidata, title);
+    constructor(transaction, model, title) {
+        super(transaction, model, title);
     }
 
     run() {
@@ -179,7 +179,7 @@ class ApiCall_Parse extends ApiCallByTitle
         }
 
         if(seeAlsoIndex !== undefined) {
-            new ApiCall_SectionLinks(this.transaction, this.wikidata, this.title, seeAlsoIndex).run();
+            new ApiCall_SectionLinks(this.transaction, this.model, this.title, seeAlsoIndex).run();
         }
     }
 }

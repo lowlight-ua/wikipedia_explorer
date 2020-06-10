@@ -1,4 +1,4 @@
-// Get categories for anyl articles in transaction.wikidata 
+// Get categories for anyl articles in transaction.model 
 // that doesn't have categories defined yet.
 
 class ApiCall_Categories extends ApiCall
@@ -8,6 +8,6 @@ class ApiCall_Categories extends ApiCall
     }
 
     run() {
-        const wikidata = this.transaction.wikidata;
+        const model = this.transaction.model;
     }
 }

@@ -7,7 +7,7 @@ let expl = {};
 class Explorer 
 {
     constructor() {
-        this.data = new WikiData();
+        this.data = new Model();
         this.steps = 0;
     }
 
