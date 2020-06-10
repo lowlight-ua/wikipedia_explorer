@@ -24,7 +24,7 @@ class Explorer
 
     onArticlesGathered() {
         // Phase 2: gather information about newly discovered articles and categories.
-        
+
         const transaction = new ApiTransaction(this.onCategoriesAssigned.bind(this)); 
         new ApiCall_Categories(transaction, this.model).run();
     }
@@ -33,12 +33,12 @@ class Explorer
         console.log(this.model);
         const analysis = analyze(this.model, this.title);
         
-        for(let score of Object.keys(analysis).sort((a,b)=>a-b)) {
-            const articles = analysis[score];
-            for(let article of Object.values(articles)) {
-                console.log(score + "     " + article);
-            }
-        }
+        // for(let score of Object.keys(analysis).sort((a,b)=>a-b)) {
+        //     const articles = analysis[score];
+        //     for(let article of Object.values(articles)) {
+        //         console.log(score + "     " + article);
+        //     }
+        // }
     }
 
 }
