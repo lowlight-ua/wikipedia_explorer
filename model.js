@@ -1,22 +1,41 @@
 'use strict';
 
+//-----------------------------------------------------------------------------
+
+class Category
+{
+    title;
+    parents;
+    children;
+}
+
+//-----------------------------------------------------------------------------
+
 class Article 
 {
     title;
 
-    // Related articles
+    // Related articles. All entries are arrays of article titles (strings).
+
         // Incoming links into this article, except from transcluded content.
+        // Sorted by relevance.
         linksTo = [];
-        // Links from this article.
+
+        // Links from this article. Unsorted.
         linksFrom = [];
-        // Links from this article, only from "see also" section.
+        
+        // Links from this article, only from "see also" section. Unsorted.
         linksFromSeeAlso = [];
+
         // Links that the search finds when we search for the article title.
+        // Sorted by relevance.
         moreLike = [];
 
-    // Categories that the artile belongs to.
+    // Categories that the artile belongs to. Array of titles (strings).
     categories = [];
+
     // "Page assessments", includes wikiproject information.
+    // Key = wikiproject; value object = page assessments.
     assessments = {};
 
     constructor(value) {

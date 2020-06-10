@@ -41,7 +41,6 @@ function analyze(model, title) {
         if(a!=article) {
             a.categories.forEach(function(i) {
                 if(article.categories.includes(i)) {
-                    console.log(a.title + "- category match");
                     incr(relevant, a.title, 4);
                 }
             })
