@@ -27,7 +27,12 @@ class Explorer
     onCategoriesAssigned() {
         console.log(this.model);
         const analysis = analyze(this.model, this.title);
-        console.log(analysis);
+        
+        for(let [score, articles] of Object.entries(analysis).sort()) {
+            for(let article of Object.values(articles)) {
+                console.log(score + "     " + article);
+            }
+        }
     }
 
 }
