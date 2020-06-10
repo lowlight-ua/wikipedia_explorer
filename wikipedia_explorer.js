@@ -13,10 +13,10 @@ class Explorer
 
     run(title) {
         this.data.articles[title] = new Article(title);
-        const caller = new ApiCaller(this.onOperationComplete.bind(this));
-        new ApiCall_Query1(caller, this, title).run();
-        new ApiCall_Query2(caller, this, title).run();
-        new ApiCall_Parse(caller, this, title).run();
+        const transaction = new ApiTransaction(this.onTransactionComplete.bind(this));
+        new ApiCall_Query1(transaction, this, title).run();
+        new ApiCall_Query2(transaction, this, title).run();
+        new ApiCall_Parse(transaction, this, title).run();
     }
 
     onStepBegin() {
@@ -25,10 +25,10 @@ class Explorer
 
     onStepComplete() {
         this.steps--;
-        if (this.steps == 0) { this.onOperationComplete(); }
+        if (this.steps == 0) { this.onTransactionComplete(); }
     }
 
-    onOperationComplete() {
+    onTransactionComplete() {
         console.log(this.data);
     }
 

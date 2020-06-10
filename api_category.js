@@ -1,13 +1,13 @@
-// Get categories for anyl articles in caller.wikidata 
+// Get categories for anyl articles in transaction.wikidata 
 // that doesn't have categories defined yet.
 
 class ApiCall_Categories extends ApiCall
 {
-    constructor(caller) {
-        super(caller);
+    constructor(transaction) {
+        super(transaction);
     }
 
     run() {
-        const wikidata = this.caller.wikidata;
+        const wikidata = this.transaction.wikidata;
     }
 }

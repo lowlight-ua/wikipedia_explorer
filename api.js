@@ -1,4 +1,4 @@
-class ApiCaller {
+class ApiTransaction {
     steps = 0;
     onComplete;
 
@@ -22,13 +22,13 @@ class ApiCaller {
 
 class ApiCall
 {
-    caller;
+    transaction;
     explorer;
 
-    constructor(caller, explorer) {
-        if(!caller) { throw new Error("caller empty"); }
+    constructor(transaction, explorer) {
+        if(!transaction) { throw new Error("transaction empty"); }
         if(!explorer) { throw new Error("explorer empty"); }
-        this.caller = caller;
+        this.transaction = transaction;
         this.explorer = explorer;
     }
 
@@ -43,11 +43,11 @@ class ApiCall
         cfg.xhrFields.withCredentials = false;
         cfg.dataType = 'json';
 
-        this.caller.onStepBegin();
+        this.transaction.onStepBegin();
         const thisOp = this;
         $.ajax(ajaxConfig).done(function(data, status) {
             thisOp.onDone(data, status)
-            thisOp.caller.onStepComplete();
+            thisOp.transaction.onStepComplete();
         });
     }
 }
@@ -60,8 +60,8 @@ class ApiCallByTitle extends ApiCall
 {
     title;
 
-    constructor(caller, explorer, title) {
-        super(caller, explorer);
+    constructor(transaction, explorer, title) {
+        super(transaction, explorer);
         if(!title) { throw new Error("Empty title"); }
         this.title = title;
     }

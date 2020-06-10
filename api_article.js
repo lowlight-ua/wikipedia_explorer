@@ -3,8 +3,8 @@
 
 class ApiCall_Query1 extends ApiCallByTitle 
 {
-    constructor(caller, explorer, title) {
-        super(caller, explorer, title);
+    constructor(transaction, explorer, title) {
+        super(transaction, explorer, title);
     }
 
     run() {
@@ -82,8 +82,8 @@ class ApiCall_Query1 extends ApiCallByTitle
 
 class ApiCall_Query2 extends ApiCallByTitle 
 {
-    constructor(caller, explorer, title) {
-        super(caller, explorer, title);
+    constructor(transaction, explorer, title) {
+        super(transaction, explorer, title);
     }
 
     run() {
@@ -114,8 +114,8 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 {
     sectionIndex;
 
-    constructor(caller, explorer, title, sectionIndex) {
-        super(caller, explorer, title);
+    constructor(transaction, explorer, title, sectionIndex) {
+        super(transaction, explorer, title);
         if (!sectionIndex && sectionIndex !== 0) {
             throw new Error("sectionIndex not defined");
         }
@@ -153,8 +153,8 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 
 class ApiCall_Parse extends ApiCallByTitle 
 {
-    constructor(caller, explorer, title) {
-        super(caller, explorer, title);
+    constructor(transaction, explorer, title) {
+        super(transaction, explorer, title);
     }
 
     run() {
@@ -179,7 +179,7 @@ class ApiCall_Parse extends ApiCallByTitle
         }
 
         if(seeAlsoIndex !== undefined) {
-            new ApiCall_SectionLinks(this.caller, this.explorer, this.title, seeAlsoIndex).run();
+            new ApiCall_SectionLinks(this.transaction, this.explorer, this.title, seeAlsoIndex).run();
         }
     }
 }
