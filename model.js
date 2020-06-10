@@ -5,8 +5,8 @@
 class Category
 {
     title;
-    parents;
-    children;
+    parents = [];
+    children = [];
 }
 
 //-----------------------------------------------------------------------------
@@ -19,24 +19,24 @@ class Article
 
         // Incoming links into this article, except from transcluded content.
         // Sorted by relevance.
-        linksTo = [];
+        get linksTo() { return this.linksTo_ ? this.linksTo_ : (this.linksTo_ = []); }
 
         // Links from this article. Unsorted.
-        linksFrom = [];
+        get linksFrom() { return this.linksFrom_ ? this.linksFrom_ : (this.linksFrom_ = []); }
         
         // Links from this article, only from "see also" section. Unsorted.
-        linksFromSeeAlso = [];
+        get linksFromSeeAlso() { return this.linksFromSeeAlso_ ? this.linksFromSeeAlso_ : (this.linksFromSeeAlso_ = []); }
 
         // Links that the search finds when we search for the article title.
         // Sorted by relevance.
-        moreLike = [];
+        get moreLike() { return this.moreLike_ ? this.moreLike_ : (this.moreLike_ = []); }
 
     // Categories that the artile belongs to. Array of titles (strings).
-    categories = [];
+    get categories() { return this.categories_ ? this.categories_ : (this.categories_ = []); }
 
     // "Page assessments", includes wikiproject information.
     // Key = wikiproject; value object = page assessments.
-    assessments = {};
+    assessments;
 
     constructor(value) {
         if(!value) { throw new Error("Empty title"); }
