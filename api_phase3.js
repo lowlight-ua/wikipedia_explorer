@@ -39,7 +39,16 @@ class ApiCall_CategoryParents extends ApiCallBase
     }
 
     onDone(data) {
-        
+        const qp = data.query.pages;
+        for (let page of Object.values(qp)) {
+            const model = this.model;
+            const childTitle = page.title;
+            const childCat = model.categories[childTitle];
+            const parentCats = page.categories;
+            if (parentCats) {
+                parentCats.forEach(i => model.categoryParents(childCat, i.title, this.generation - 1));
+            }
+        }
     }
 }
 

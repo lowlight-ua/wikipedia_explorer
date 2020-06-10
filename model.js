@@ -69,6 +69,14 @@ class Model
         }
     }
 
+    touchCategory(category) {
+        if (!this.categories[category]) {
+            this.categories[category] = new Category(category);
+        }  else { 
+            console.log(category + "is already present");
+        }
+    }
+
     articleLinkTo(artTarget, strSource) {
         artTarget.linksTo.push(strSource);
         this.touchArticle(strSource);
@@ -93,9 +101,15 @@ class Model
 
     articleCategories(article, category) {
         article.categories.push(category);
-        if (!this.categories[category]) {
-            this.categories[category] = new Category(category);
-        }    
+        this.touchCategory(category);
         this.categories[category].articles.add(article.title);
+    }
+
+    categoryParents(childCat, parentTitle, newGeneration) {
+        console.log(parentTitle + ' is parent of ' + childCat.title);
+        childCat.parents.add(parentTitle);
+        this.touchCategory(parentTitle);
+        this.categories[parentTitle].children.add(childCat.title);
+        this.categories[parentTitle].generation = newGeneration;
     }
 }
