@@ -23,19 +23,7 @@ class ApiCall_Categories extends ApiCallBase
             }
         }
 
-        let titleString = "";
-        let counter = 0;
-        for (let i = 0; i < titles.length; i++) {
-            const title = titles[i];
-            titleString += (counter ? "|" : "") + title;
-            counter++;
-            if(counter == 50) {
-                this.query(titleString);
-                titleString = "";
-                counter = 0;
-            }
-        }
-        this.query(titleString);
+        titlefy(titles, 50, titleString => this.query(titleString));
     }
 
     query(titles) {

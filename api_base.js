@@ -74,3 +74,23 @@ class ApiCallByTitle extends ApiCallBase
         this.title = title;
     }
 }
+
+// ----------------------------------------------------------------------------
+
+function titlefy(titles, limit, callback) {
+    let titleString = "";
+    let counter = 0;
+    for (let i = 0; i < titles.length; i++) {
+        const title = titles[i];
+        titleString += (counter ? "|" : "") + title;
+        counter++;
+        if(counter == limit) {
+            callback(titleString);
+            titleString = "";
+            counter = 0;
+        }
+    }
+    if (titleString.length > 0) {
+        callback(titleString);
+    }
+}
