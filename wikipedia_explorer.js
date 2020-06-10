@@ -7,16 +7,16 @@ let expl = {};
 class Explorer 
 {
     constructor() {
-        this.data = new Model();
+        this.model = new Model();
         this.steps = 0;
     }
 
     run(title) {
-        this.data.articles[title] = new Article(title);
+        this.model.articles[title] = new Article(title);
         const transaction = new ApiTransaction(this.onTransactionComplete.bind(this));
-        new ApiCall_Query1(transaction, this.data, title).run();
-        new ApiCall_Query2(transaction, this.data, title).run();
-        new ApiCall_Parse(transaction, this.data, title).run();
+        new ApiCall_Query1(transaction, this.model, title).run();
+        new ApiCall_Query2(transaction, this.model, title).run();
+        new ApiCall_Parse(transaction, this.model, title).run();
     }
 
     onStepBegin() {
@@ -29,7 +29,7 @@ class Explorer
     }
 
     onTransactionComplete() {
-        console.log(this.data);
+        console.log(this.model);
     }
 
 }
