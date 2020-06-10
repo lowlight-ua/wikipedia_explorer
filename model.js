@@ -12,6 +12,7 @@ class Category
     generation; 
 
     articles = new Set();
+    articlesDeep = new Set();
     parents = new Set();
     children = new Set();
 
@@ -72,8 +73,6 @@ class Model
     touchCategory(category) {
         if (!this.categories[category]) {
             this.categories[category] = new Category(category);
-        }  else { 
-            console.log(category + "is already present");
         }
     }
 
@@ -103,13 +102,15 @@ class Model
         article.categories.push(category);
         this.touchCategory(category);
         this.categories[category].articles.add(article.title);
+        this.categories[category].articlesDeep.add(article.title);
     }
 
     categoryParents(childCat, parentTitle, newGeneration) {
-        console.log(parentTitle + ' is parent of ' + childCat.title);
         childCat.parents.add(parentTitle);
         this.touchCategory(parentTitle);
-        this.categories[parentTitle].children.add(childCat.title);
-        this.categories[parentTitle].generation = newGeneration;
+        const parentCat = this.categories[parentTitle];
+        parentCat.children.add(childCat.title);
+        ([...childCat.articles]).forEach(i => parentCat.articlesDeep.add(i));
+        parentCat.generation = newGeneration;
     }
 }

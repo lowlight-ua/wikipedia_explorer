@@ -36,15 +36,15 @@ class Explorer
 
     onCategoryTreeBuilt() {
         console.log(this.model);
-    }
 
-    // const analysis = analyze(this.model, this.title);
+        const analysis = analyze(this.model, this.title);
     
-    // for(let score of Object.keys(analysis).sort((a,b)=>a-b)) {
-    //     const articles = analysis[score];
-    //     for(let article of Object.values(articles)) {
-    //         console.log(score + "     " + article);
-    //     }
-    // }
+        for(let score of Object.keys(analysis).sort((a,b)=>a-b)) {
+            const articles = analysis[score];
+            for(let article of Object.values(articles)) {
+                console.log(score + "     " + article);
+            }
+        }
+    }
 
 }
