@@ -30,7 +30,11 @@ class Explorer
     }
 
     onCategoriesAssigned() {
-        const transaction = new ApiTransaction(this.onCategoryTreeBuilt.bind(this)); 
+        const thisObj = this;
+        const transaction = new ApiTransaction(function() {
+            const transaction = new ApiTransaction(thisObj.onCategoryTreeBuilt.bind(thisObj)); 
+            new ApiCall_CategoryParents(transaction, thisObj.model, -1).run();
+        }); 
         new ApiCall_CategoryParents(transaction, this.model, 0).run();
     }
 
