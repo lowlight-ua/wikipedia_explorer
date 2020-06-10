@@ -52,18 +52,18 @@ class ApiCall_Query1 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const wikiData = this.wikidata.data;
-        const article = wikiData.articles[this.title];
+        const wikidata = this.wikidata;
+        const article = wikidata.articles[this.title];
         const dqs = data.query.search;
         const dqp = data.query.pages;
         const dqp0 = dqp[Object.keys(dqp)[0]];
 
         // Incoming links        
-        dqs.forEach(i => wikiData.addLinkTo(article, i.title));
+        dqs.forEach(i => wikidata.addLinkTo(article, i.title));
 
         // Outgoing links
         const links = dqp0.links;
-        links.forEach(i => wikiData.addLinkFrom(article, i.title));
+        links.forEach(i => wikidata.addLinkFrom(article, i.title));
 
         // Categories
         const categories = dqp0.categories;
@@ -100,10 +100,10 @@ class ApiCall_Query2 extends ApiCallByTitle
     }
     
     onDone(data) {
-        const wikiData = this.wikidata.data;
-        const article = wikiData.articles[this.title];
+        const wikidata = this.wikidata;
+        const article = wikidata.articles[this.title];
         const dqs = data.query.search;
-        dqs.forEach(i => wikiData.addMoreLike(article, i.title));
+        dqs.forEach(i => wikidata.addMoreLike(article, i.title));
     }}
 
 // ============================================================================
@@ -136,11 +136,11 @@ class ApiCall_SectionLinks extends ApiCallByTitle
     onDone(data) {
         console.log(data);
         const links = data.parse.links;
-        const wikiData = this.wikidata.data;
-        const article = wikiData.articles[this.title];
+        const wikidata = this.wikidata;
+        const article = wikidata.articles[this.title];
         links.forEach(function(i) { 
             if(i.ns === 0 && i.exists !== undefined) {
-                wikiData.addLinkFromSeeAlso(article, i['*']);
+                wikidata.addLinkFromSeeAlso(article, i['*']);
             }
         });
     }
