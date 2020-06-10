@@ -8,5 +8,9 @@ class ApiCall_Categories extends ApiCallBase
     }
 
     run() {
+        // max 50 per query
+        for (let title of Object.entries(this.model.articles)) {
+            console.log(title);
+        }
     }
 }
