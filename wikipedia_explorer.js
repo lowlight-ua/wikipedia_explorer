@@ -23,6 +23,8 @@ class Explorer
     }
 
     onArticlesGathered() {
+        // Phase 2: gather information about newly discovered articles and categories.
+        
         const transaction = new ApiTransaction(this.onCategoriesAssigned.bind(this)); 
         new ApiCall_Categories(transaction, this.model).run();
     }

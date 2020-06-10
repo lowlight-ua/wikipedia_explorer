@@ -6,11 +6,19 @@ class Category
 {
     title;
 
+    // 0: discovered during phase1. 
+    // Negative: generations of ancestor categories.
+    // Positive: generations of descendant categories.
+    generation; 
+
     articles = new Set();
     parents = new Set();
     children = new Set();
 
-    constructor(title) { this.title = title; }
+    constructor(title, generation = 0) { 
+        this.title = title; 
+        this.generation = generation;
+    }
 }
 
 //-----------------------------------------------------------------------------
