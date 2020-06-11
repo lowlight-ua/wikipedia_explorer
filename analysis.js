@@ -1,4 +1,4 @@
-function analyze(model, title) {
+function relevantArticlesRank(model, title) {
     const article = model.articles[title];
     
     let relevant = {};

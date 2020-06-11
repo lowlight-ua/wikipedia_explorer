@@ -41,7 +41,7 @@ class Explorer
     onCategoryTreeBuilt() {
         console.log(this.model);
 
-        const analysis = analyze(this.model, this.title);
+        const analysis = relevantArticlesRank(this.model, this.title);
     
         for(let score of Object.keys(analysis).sort((a,b)=>a-b)) {
             const articles = analysis[score];
