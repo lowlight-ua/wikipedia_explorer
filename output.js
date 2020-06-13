@@ -32,7 +32,8 @@ function generateDot(model, highlightTitle) {
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const a of c.articles) {
             const yellow = a==highlightTitle ? '[fillcolor="#FFFFB0"]' : '';
-            dot += ('"' + a + ' (' + ctr + ')" ' + yellow + '\n');
+            const hyperlink = '[href="https://en.wikipedia.org/wiki/' + a + '"]';
+            dot += ('"' + a + ' (' + ctr + ')" ' + yellow + ' ' + hyperlink + '\n');
             ctr++;
         }
     }
