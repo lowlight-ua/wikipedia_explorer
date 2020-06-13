@@ -32,20 +32,23 @@ class Explorer
 
     onCategoriesAssigned() {
         console.log("Phase 2 done");
+        const model = this.model;
+        const articles = model.articles;
+        const categories = model.categories;
         
         // Rank articles
-        const {relevant, relevantByScore} = relevantArticlesRank(this.model, this.title);
+        const {relevant, relevantByScore} = relevantArticlesRank(model, this.title);
 
         // Prune articles that rank poorly from model
         for(let [title, score] of Object.entries(relevant)) {
-            if (score <= 1) {
+            if (score <= 1.5) {
                 console.log("Deleting article " + title);
-                this.model.deleteArticle(title);
+                model.deleteArticle(title);
             }
         }
-        for (let [title, c] of Object.entries(this.model.categories)) {
+        for (let [title, c] of Object.entries(categories)) {
             for (let a of c.articles) {
-                if (!this.model.articles[a]) {
+                if (!articles[a]) {
                     c.articles.delete(a);
                     c.articlesDeep.delete(a);
                     console.log("Deleted article " + a);
@@ -54,14 +57,14 @@ class Explorer
         }
 
         // Prune categories with less than 2 articles from model
-        for (let [title, c] of Object.entries(this.model.categories)) {
+        for (let [title, c] of Object.entries(categories)) {
             if (c.articles.size <= 2) {
                 console.log("Deleting category " + title);
-                delete this.model.categories[title];
+                delete categories[title];
             }
         }
 
-        console.log(this.model);
+        console.log(model);
 
     }
 }
