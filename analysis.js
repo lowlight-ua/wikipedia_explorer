@@ -69,5 +69,5 @@ function relevantArticlesRank(model, title) {
         relevantByScore[score].push(title);
     }
 
-    return relevantByScore;
+    return {relevant, relevantByScore};
 }

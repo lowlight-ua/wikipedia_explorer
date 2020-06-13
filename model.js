@@ -129,4 +129,8 @@ class Model
         }
         parentCat.generation = newGeneration;
     }
+
+    deleteArticle(title) {
+        delete this.articles[title];
+    }
 }

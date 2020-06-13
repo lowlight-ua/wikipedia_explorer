@@ -32,28 +32,16 @@ class Explorer
 
     onCategoriesAssigned() {
         console.log("Phase 2 done");
-        const thisObj = this;
-        const transaction = new ApiTransaction(function() {
-            console.log("Phase 3.1 done");
-            const transaction = new ApiTransaction(thisObj.onCategoryTreeBuilt.bind(thisObj)); 
-            new ApiCall_CategoryParents(transaction, thisObj.model, -1).run();
-        }); 
-        new ApiCall_CategoryParents(transaction, this.model, 0).run();
-    }
-
-    onCategoryTreeBuilt() {
-        console.log("Phase 3.2 done");
-        console.log("done");
         console.log(this.model);
-
-        const rar = relevantArticlesRank(this.model, this.title);
-    
-        for(let score of Object.keys(rar).sort((a,b)=>a-b)) {
-            const articles = rar[score];
-            for(let article of Object.values(articles)) {
-                console.log(score + "     " + article);
+        
+        // Rank articles
+        
+        const {relevant, relevantByScore} = relevantArticlesRank(this.model, this.title);
+        for(let [title, score] of Object.entries(relevant)) {
+            if (score <= 1) {
+                console.log("Deleting article " + title);
+                this.model.deleteArticle(title);
             }
         }
     }
-
 }
