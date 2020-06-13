@@ -52,6 +52,7 @@ class Explorer
         console.log("Phase 3 done");        
         $("#output").append('digraph { \nrankdir="LR" ' +
             'nodesep=0.3 \n' + 
+            'node [fontname="Helvetica"]\n' +
             'node [shape=box height=0,1 fontsize=12 style=filled fillcolor="#e0e0e0"]\n' +
             'edge [dir=none]\n');
         let ctr = 0;
