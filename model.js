@@ -123,10 +123,10 @@ class Model
         const parentCat = this.categories[parentTitle];
         parentCat.children.add(childCat.title);
         const thisObj = this;
-        ([...childCat.articlesDeep]).forEach(function(i) {
+        for(let i of childCat.articlesDeep) {
             parentCat.articlesDeep.add(i);
             thisObj.articles[i].categoriesDeep.add(parentTitle);
-        });
+        }
         parentCat.generation = newGeneration;
     }
 }
