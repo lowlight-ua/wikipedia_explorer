@@ -34,5 +34,13 @@ class Explorer
         console.log("Phase 2 done");        
         pruneModel(this.model, this.title);
         console.log(this.model);
+
+        $("#output").append("digraph G {\n");
+        for (const [ctitle, c] of Object.entries(this.model.categories)) {
+            for(const a of c.articles) {
+                $("#output").append('"' + ctitle + '" -> "' + a + '"\n');
+            }
+        }
+        $("#output").append("}\n");
     }
 }
