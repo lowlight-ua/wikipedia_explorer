@@ -35,12 +35,27 @@ class Explorer
         console.log(this.model);
         
         // Rank articles
-        
         const {relevant, relevantByScore} = relevantArticlesRank(this.model, this.title);
         for(let [title, score] of Object.entries(relevant)) {
             if (score <= 1) {
                 console.log("Deleting article " + title);
                 this.model.deleteArticle(title);
+            }
+        }
+
+        // Prune categories
+        for (let [title, c] of Object.entries(this.model.categories)) {
+            for (let a of c.articles) {
+                if (!this.model.articles[a]) {
+                    c.articles.delete(a);
+                    c.articlesDeep.delete(a);
+                    console.log("Deleted article " + a);
+                }
+            }
+        }
+        for (let [title, c] of Object.entries(this.model.categories)) {
+            for (let a of c.articles) {
+                console.log(title + "    ->    " + a);
             }
         }
     }
