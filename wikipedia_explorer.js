@@ -53,21 +53,24 @@ class Explorer
         $("#output").append('digraph { \nrankdir="LR" ' +
             'nodesep=0.3 \n' + 
             'node [fontname="Helvetica"]\n' +
-            'node [shape=box height=0,1 fontsize=12 style=filled fillcolor="#e0e0e0"]\n' +
+            'node [shape=box height=0,1 fontsize=10 style=filled fillcolor="#e0e0e0"]\n' +
             'edge [dir=none]\n');
         let ctr = 0;
+        function cTrim(c) {
+            return c.substring(9);
+        }
         
         // Nodes
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
-            $("#output").append('"' + ctitle + '"\n');
+            $("#output").append('"' + cTrim(ctitle) + '"\n');
             for(const p of c.parents) {
                 if(this.model.categories[p]) {
-                    $("#output").append('"' + p + '"\n');
+                    $("#output").append('"' + cTrim(p) + '"\n');
                 }
             }
         }
         $("#output").append('nodesep=0.1 ' + 
-            'node [shape=none height=0,1 fontsize=10 style=filled fillcolor="#f0f0f0"]\n');
+            'node [shape=none height=0,1 fontsize=9 style=filled fillcolor="#f0f0f0"]\n');
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
             for(const a of c.articles) {
                 const yellow = a==this.title ? '[fillcolor="#FFFFB0"]' : '';
@@ -81,11 +84,11 @@ class Explorer
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
             for(const p of c.parents) {
                 if(this.model.categories[p]) {
-                    $("#output").append('"' + p + '" -> "' + ctitle + '"\n');
+                    $("#output").append('"' + cTrim(p) + '" -> "' + cTrim(ctitle) + '"\n');
                 }
             }
             for(const a of c.articles) {
-                $("#output").append('"' + ctitle + '" -> "' + a + ' (' + ctr + ')" [color="#B0B0B0"]\n');
+                $("#output").append('"' + cTrim(ctitle) + '" -> "' + a + ' (' + ctr + ')" [color="#B0B0B0"]\n');
                 ctr++;
             }
         }
