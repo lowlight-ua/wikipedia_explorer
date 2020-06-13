@@ -32,16 +32,7 @@ class Explorer
 
     onCategoriesAssigned() {
         console.log("Phase 2 done");        
-        pruneModel(this.model, this.title);
         console.log(this.model);
-
-        // $("#output").append("digraph G {\n");
-        // for (const [ctitle, c] of Object.entries(this.model.categories)) {
-        //     for(const a of c.articles) {
-        //         $("#output").append('"' + ctitle + '" -> "' + a + '"\n');
-        //     }
-        // }
-        // $("#output").append("}\n");
 
         const thisObj = this;
         const transaction = new ApiTransaction(thisObj.onCategoryTreeBuilt.bind(thisObj)); 
@@ -49,8 +40,11 @@ class Explorer
     }
 
     onCategoryTreeBuilt() {
-        console.log("Phase 3 done");        
-        $("#output").append('digraph { \nrankdir="LR" ' +
+        pruneModel(this.model, this.title);
+
+        console.log("Phase 3 done");     
+        let dot = new String();   
+        dot += ('digraph { \nrankdir="LR" ' +
             'nodesep=0.3 \n' + 
             'node [fontname="Helvetica"]\n' +
             'node [shape=box height=0.4 fontsize=10 style=filled fillcolor="#e0e0e0"]\n' +
@@ -60,8 +54,8 @@ class Explorer
             return c.substring(9);
         }
         function printCategory(c) {
-            const fontSize = 8 + c.articles.size * 0.5;
-            $("#output").append('"' + cTrim(c.title) + '" [fontsize=' + fontSize + ']\n');
+            const fontSize = 8 + (c.articles.size + c.children.size) * 0.6;
+            dot += ('"' + cTrim(c.title) + '" [fontsize=' + fontSize + ']\n');
         }
         
         // Nodes
@@ -74,13 +68,13 @@ class Explorer
                 }
             }
         }
-        $("#output").append('nodesep=0.1 ' + 
+        dot += ('nodesep=0.1 ' + 
             'node [shape=none height=0 fontsize=8 style=filled fillcolor="#f0f0f0"]\n');
             
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
             for(const a of c.articles) {
                 const yellow = a==this.title ? '[fillcolor="#FFFFB0"]' : '';
-                $("#output").append('"' + a + ' (' + ctr + ')" ' + yellow + '\n');
+                dot += ('"' + a + ' (' + ctr + ')" ' + yellow + '\n');
                 ctr++;
             }
         }
@@ -90,14 +84,16 @@ class Explorer
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
             for(const p of c.parents) {
                 if(this.model.categories[p]) {
-                    $("#output").append('"' + cTrim(p) + '" -> "' + cTrim(ctitle) + '"\n');
+                    dot += ('"' + cTrim(p) + '" -> "' + cTrim(ctitle) + '"\n');
                 }
             }
             for(const a of c.articles) {
-                $("#output").append('"' + cTrim(ctitle) + '" -> "' + a + ' (' + ctr + ')" [color="#B0B0B0"]\n');
+                dot += ('"' + cTrim(ctitle) + '" -> "' + a + ' (' + ctr + ')" [color="#B0B0B0"]\n');
                 ctr++;
             }
         }
-        $("#output").append('}');
+        dot += ('}');
+
+        $("#output").append(dot);
     }
 }
