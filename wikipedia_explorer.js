@@ -70,11 +70,13 @@ class Explorer
             'node [shape=none height=0,1 fontsize=10 style=filled fillcolor="#f0f0f0"]\n');
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
             for(const a of c.articles) {
-                $("#output").append('"' + a + ' (' + ctr + ')"\n');
+                const yellow = a==this.title ? '[fillcolor="#FFFFB0"]' : '';
+                $("#output").append('"' + a + ' (' + ctr + ')" ' + yellow + '\n');
                 ctr++;
             }
         }
 
+        ctr = 0;
         // Edges
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
             for(const p of c.parents) {
