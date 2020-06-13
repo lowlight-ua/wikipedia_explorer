@@ -80,10 +80,18 @@ function pruneModel(model, focusedTitle) {
 
     // Rank articles
     const {relevant, relevantByScore} = relevantArticlesRank(model, focusedTitle);
+    for(let score of Object.keys(relevantByScore).sort((a,b)=>a-b)) {
+        const articles = relevantByScore[score];
+        for(let article of Object.values(articles)) {
+            console.log(score + "     " + article);
+        }
+    }
 
     // Prune articles that rank poorly from model
+    const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
+    console.log("Maxscore=" + maxScore);
     for(let [title, score] of Object.entries(relevant)) {
-        if (score <= 1.5) {
+        if (score <= maxScore*0.1) {
             model.deleteArticle(title);
         }
     }
@@ -98,7 +106,7 @@ function pruneModel(model, focusedTitle) {
 
     // Prune categories with less than 2 articles from model
     for (let [title, c] of Object.entries(categories)) {
-        if (c.articles.size <= 2) {
+        if (c.articles.size < 2) {
             delete categories[title];
         }
     }

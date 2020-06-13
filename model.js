@@ -93,7 +93,7 @@ class Model
 
     articleLinkFrom(artSource, strTarget) {
         artSource.linksFrom.push(strTarget);
-        this.touchArticle(strTarget);
+        //this.touchArticle(strTarget);
     }
 
     articleMoreLike(article, strRelated) {

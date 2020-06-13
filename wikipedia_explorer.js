@@ -53,24 +53,30 @@ class Explorer
         $("#output").append('digraph { \nrankdir="LR" ' +
             'nodesep=0.3 \n' + 
             'node [fontname="Helvetica"]\n' +
-            'node [shape=box height=0,1 fontsize=10 style=filled fillcolor="#e0e0e0"]\n' +
+            'node [shape=box height=0.4 fontsize=10 style=filled fillcolor="#e0e0e0"]\n' +
             'edge [dir=none]\n');
         let ctr = 0;
         function cTrim(c) {
             return c.substring(9);
         }
+        function printCategory(c) {
+            const fontSize = 8 + c.articles.size * 0.5;
+            $("#output").append('"' + cTrim(c.title) + '" [fontsize=' + fontSize + ']\n');
+        }
         
         // Nodes
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
-            $("#output").append('"' + cTrim(ctitle) + '"\n');
+            printCategory(c);
             for(const p of c.parents) {
-                if(this.model.categories[p]) {
-                    $("#output").append('"' + cTrim(p) + '"\n');
+                const pObj = this.model.categories[p];
+                if(pObj) {
+                    printCategory(pObj);
                 }
             }
         }
         $("#output").append('nodesep=0.1 ' + 
-            'node [shape=none height=0,1 fontsize=9 style=filled fillcolor="#f0f0f0"]\n');
+            'node [shape=none height=0 fontsize=8 style=filled fillcolor="#f0f0f0"]\n');
+            
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
             for(const a of c.articles) {
                 const yellow = a==this.title ? '[fillcolor="#FFFFB0"]' : '';
