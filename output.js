@@ -3,9 +3,14 @@ function generateDot(model, highlightTitle) {
         return c.substring(9);
     }
 
+    function href(title) {
+        return '[href="https://en.wikipedia.org/wiki/' + title + '"]';
+
+    }
+
     function printCategory(c) {
         const fontSize = 8 + (c.articles.size + c.children.size) * 0.6;
-        dot += ('"' + cTrim(c.title) + '" [fontsize=' + fontSize + ']\n');
+        dot += ('"' + cTrim(c.title) + '" [fontsize=' + fontSize + '] ' + href(c.title) + '\n');
     }
 
     let dot = new String();   
@@ -32,8 +37,7 @@ function generateDot(model, highlightTitle) {
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const a of c.articles) {
             const yellow = a==highlightTitle ? '[fillcolor="#FFFFB0"]' : '';
-            const hyperlink = '[href="https://en.wikipedia.org/wiki/' + a + '"]';
-            dot += ('"' + a + ' (' + ctr + ')" ' + yellow + ' ' + hyperlink + '\n');
+            dot += ('"' + a + ' (' + ctr + ')" ' + yellow + ' ' + href(a) + '\n');
             ctr++;
         }
     }
