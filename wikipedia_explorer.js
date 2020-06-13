@@ -44,6 +44,13 @@ class Explorer
         const dot = generateDot(this.model, this.title);
         var svg = Viz(dot, "svg");
         $("#output_div").html(svg);
+
+        $('text').click(function() {
+            const thisObj = $(this);
+            console.log(thisObj.parent().attr('xlink:href'));
+            return false;
+        });
+
         console.log("Phase 3 done");     
     }
 }
