@@ -50,10 +50,31 @@ class Explorer
 
     onCategoryTreeBuilt() {
         console.log("Phase 3 done");        
-        $("#output").append('digraph { rankdir="LR" ' +
-            'nodesep=0.1 ' + 
-            'node [shape=none height=0,1 fontsize=10 style=filled fillcolor="#f0f0f0"]');
+        $("#output").append('digraph { \nrankdir="LR" ' +
+            'nodesep=0.3 \n' + 
+            'node [shape=box height=0,1 fontsize=12 style=filled fillcolor="#e0e0e0"]\n' +
+            'edge [dir=none]\n');
         let ctr = 0;
+        
+        // Nodes
+        for (const [ctitle, c] of Object.entries(this.model.categories)) {
+            $("#output").append('"' + ctitle + '"\n');
+            for(const p of c.parents) {
+                if(this.model.categories[p]) {
+                    $("#output").append('"' + p + '"\n');
+                }
+            }
+        }
+        $("#output").append('nodesep=0.1 ' + 
+            'node [shape=none height=0,1 fontsize=10 style=filled fillcolor="#f0f0f0"]\n');
+        for (const [ctitle, c] of Object.entries(this.model.categories)) {
+            for(const a of c.articles) {
+                $("#output").append('"' + a + ' (' + ctr + ')"\n');
+                ctr++;
+            }
+        }
+
+        // Edges
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
             for(const p of c.parents) {
                 if(this.model.categories[p]) {
@@ -61,10 +82,10 @@ class Explorer
                 }
             }
             for(const a of c.articles) {
-                $("#output").append('"' + ctitle + '" -> "' + a + ' (' + ctr + ')"\n');
+                $("#output").append('"' + ctitle + '" -> "' + a + ' (' + ctr + ')" [color="#B0B0B0"]\n');
                 ctr++;
             }
         }
-        $("#output").append("}\n");
+        $("#output").append('}');
     }
 }
