@@ -1,4 +1,4 @@
-function generateDot(model) {
+function generateDot(model, highlightTitle) {
     function cTrim(c) {
         return c.substring(9);
     }
@@ -31,7 +31,7 @@ function generateDot(model) {
         
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const a of c.articles) {
-            const yellow = a==this.title ? '[fillcolor="#FFFFB0"]' : '';
+            const yellow = a==highlightTitle ? '[fillcolor="#FFFFB0"]' : '';
             dot += ('"' + a + ' (' + ctr + ')" ' + yellow + '\n');
             ctr++;
         }

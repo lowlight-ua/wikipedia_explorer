@@ -41,7 +41,7 @@ class Explorer
 
     onCategoryTreeBuilt() {
         pruneModel(this.model, this.title);
-        const dot = generateDot(this.model);
+        const dot = generateDot(this.model, this.title);
         var svg = Viz(dot, "svg");
         $("#output_div").html(svg);
         console.log("Phase 3 done");     
