@@ -50,7 +50,9 @@ class Explorer
 
     onCategoryTreeBuilt() {
         console.log("Phase 3 done");        
-        $("#output").append('digraph G {\nrankdir="LR"\nnode [shape=box]');
+        $("#output").append('digraph { rankdir="LR" ' +
+            'nodesep=0.1 ' + 
+            'node [shape=none height=0,1 fontsize=10 style=filled fillcolor="#f0f0f0"]');
         let ctr = 0;
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
             for(const p of c.parents) {
