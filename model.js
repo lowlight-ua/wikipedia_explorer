@@ -119,16 +119,17 @@ class Model
 
     categoryParents(childCat, parentTitle, newGeneration) {
         childCat.parents.add(parentTitle);
-        this.touchCategory(parentTitle);
         const parentCat = this.categories[parentTitle];
-        parentCat.children.add(childCat.title);
-        const thisObj = this;
-        for(let i of childCat.articlesDeep) {
-            parentCat.articlesDeep.add(i);
-            thisObj.articles[i].categoriesDeep.add(parentTitle);
+        if (parentCat) {
+            parentCat.children.add(childCat.title);
+            const thisObj = this;
+            for(let i of childCat.articlesDeep) {
+                parentCat.articlesDeep.add(i);
+                thisObj.articles[i].categoriesDeep.add(parentTitle);
+            }
+            parentCat.generation = newGeneration;
         }
-        parentCat.generation = newGeneration;
-    }
+     }
 
     deleteArticle(title) {
         delete this.articles[title];

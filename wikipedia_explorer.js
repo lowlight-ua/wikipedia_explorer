@@ -35,8 +35,28 @@ class Explorer
         pruneModel(this.model, this.title);
         console.log(this.model);
 
-        $("#output").append("digraph G {\n");
+        // $("#output").append("digraph G {\n");
+        // for (const [ctitle, c] of Object.entries(this.model.categories)) {
+        //     for(const a of c.articles) {
+        //         $("#output").append('"' + ctitle + '" -> "' + a + '"\n');
+        //     }
+        // }
+        // $("#output").append("}\n");
+
+        const thisObj = this;
+        const transaction = new ApiTransaction(thisObj.onCategoryTreeBuilt.bind(thisObj)); 
+        new ApiCall_CategoryParents(transaction, thisObj.model, 0).run();
+    }
+
+    onCategoryTreeBuilt() {
+        console.log("Phase 3 done");        
+        $("#output").append('digraph G {\nrankdir="LR"\n');
         for (const [ctitle, c] of Object.entries(this.model.categories)) {
+            for(const p of c.parents) {
+                if(this.model.categories[p]) {
+                    $("#output").append('"' + p + '" -> "' + ctitle + '"\n');
+                }
+            }
             for(const a of c.articles) {
                 $("#output").append('"' + ctitle + '" -> "' + a + '"\n');
             }
