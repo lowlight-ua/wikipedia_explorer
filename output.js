@@ -37,7 +37,7 @@ function generateDot(model, highlightTitle) {
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const a of c.articles) {
             const yellow = a==highlightTitle ? '[fillcolor="#FFFFB0"]' : '';
-            dot += ('"' + a + ' (' + ctr + ')" ' + yellow + ' ' + href(a) + '\n');
+            dot += ('"' + ctr + '" [label="' + a + '"] ' + yellow + ' ' + href(a) + '\n');
             ctr++;
         }
     }
@@ -51,7 +51,7 @@ function generateDot(model, highlightTitle) {
             }
         }
         for(const a of c.articles) {
-            dot += ('"' + cTrim(ctitle) + '" -> "' + a + ' (' + ctr + ')" [color="#B0B0B0"]\n');
+            dot += ('"' + cTrim(ctitle) + '" -> "' + ctr + '" [color="#B0B0B0"]\n');
             ctr++;
         }
     }

@@ -78,6 +78,7 @@ class Model
         if (!this.articles[title]) {
             this.articles[title] = new Article(title);
         }
+        return this.articles[title];
     }
 
     touchCategory(category) {
@@ -88,7 +89,8 @@ class Model
 
     articleLinkTo(artTarget, strSource) {
         artTarget.linksTo.push(strSource);
-        this.touchArticle(strSource);
+        const src = this.touchArticle(strSource);
+        src.linksFrom.push(artTarget.title);
     }
 
     articleLinkFrom(artSource, strTarget) {

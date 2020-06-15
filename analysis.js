@@ -12,7 +12,7 @@ function relevantArticlesRank(model, title) {
     // Boost article if it links to the focused article
     // Pre-sorted by descending relevance
     const linksTo = article.linksTo;
-    const maxWeightLinksTo = 3;
+    const maxWeightLinksTo = 2;
     for (let i=0; i<linksTo.length; i++) {
         const weight = 1 + (linksTo.length - 1 - i) / linksTo.length * maxWeightLinksTo;
         incr(relevant, linksTo[i], Math.round(weight*100)/100, "in linksTo");
@@ -29,7 +29,7 @@ function relevantArticlesRank(model, title) {
 
     // Boost article if focused article refers to it from "See also"
     for (let i=0; i<article.linksFromSeeAlso.length; i++) {
-        incr(relevant, article.linksFromSeeAlso[i], 5, "in see also");
+        incr(relevant, article.linksFromSeeAlso[i], 3, "in see also");
     }
 
     // Bump a bit, if there's otherwise an outgoing link
@@ -91,7 +91,7 @@ function pruneModel(model, focusedTitle) {
     const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
     console.log("Maxscore=" + maxScore);
     for(let [title, score] of Object.entries(relevant)) {
-        if (score <= maxScore*0.1) {
+        if (score <= maxScore*0.3) {
             model.deleteArticle(title);
         }
     }
