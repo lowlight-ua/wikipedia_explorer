@@ -24,6 +24,7 @@ class Explorer
 
     onArticlesGathered() {
         console.log("Phase 1 done");
+        console.debug(this.model);
         // Phase 2: gather information about newly discovered articles and categories.
 
         const transaction = new ApiTransaction(this.onCategoriesAssigned.bind(this)); 
@@ -32,7 +33,7 @@ class Explorer
 
     onCategoriesAssigned() {
         console.log("Phase 2 done");        
-        console.log(this.model);
+        console.debug(this.model);
 
         const thisObj = this;
         const transaction = new ApiTransaction(thisObj.onCategoryTreeBuilt.bind(thisObj)); 
@@ -40,7 +41,13 @@ class Explorer
     }
 
     onCategoryTreeBuilt() {
+        console.log("Phase 3 done");     
+        console.debug(this.model);
+
+        console.log("Pruning");     
         pruneModel(this.model, this.title);
+        console.debug(this.model);
+
         const dot = generateDot(this.model, this.title);
         var svg = Viz(dot, "svg");
         $("#output_div").html(svg);
@@ -51,6 +58,5 @@ class Explorer
             return false;
         });
 
-        console.log("Phase 3 done");     
     }
 }

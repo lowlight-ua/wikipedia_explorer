@@ -6,7 +6,6 @@ function relevantArticlesRank(model, title) {
         if(obj[title]===undefined)
             obj[title] = 0;
         obj[title] += by;
-        console.debug("Incr " + title + " by " + by + " because " + because);
     }
     
     // Boost article if it links to the focused article
@@ -80,16 +79,9 @@ function pruneModel(model, focusedTitle) {
 
     // Rank articles
     const {relevant, relevantByScore} = relevantArticlesRank(model, focusedTitle);
-    for(let score of Object.keys(relevantByScore).sort((a,b)=>a-b)) {
-        const articles = relevantByScore[score];
-        for(let article of Object.values(articles)) {
-            console.log(score + "     " + article);
-        }
-    }
 
     // Prune articles that rank poorly from model
     const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
-    console.log("Maxscore=" + maxScore);
     for(let [title, score] of Object.entries(relevant)) {
         if (score <= maxScore*0.3) {
             model.deleteArticle(title);
