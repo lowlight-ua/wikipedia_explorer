@@ -1,6 +1,6 @@
 // In this file:
 // API calls associated with the second phase of data collection: gather information
-// about all the articles and categories that were discovered during the first phase.
+// about the categories of articles that were discovered during the first phase.
 
 // ----------------------------------------------------------------------------
 

@@ -24,6 +24,7 @@ class Explorer
 
     onArticlesGathered() {
         console.log("Phase 1 done");
+        console.log(this.model.articles[this.title]);
         console.debug(this.model);
         // Phase 2: gather information about newly discovered articles and categories.
 

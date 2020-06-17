@@ -6,6 +6,7 @@ function relevantArticlesRank(model, title) {
         if(obj[title]===undefined)
             obj[title] = 0;
         obj[title] += by;
+        console.log("Incr " + title + " by " + by + " because " + because);
     }
     
     // Boost article if it links to the focused article
@@ -50,9 +51,9 @@ function relevantArticlesRank(model, title) {
                 if(article.categoriesDeep.has(i)) {
                     const gen = model.categories[i].generation;
                     let score = 0;
-                    if (gen == -1) { score = 1; }
+                    if (gen == -1) { score = 0.5; }
                     else if(gen == -2) { score = 0.1; }
-                    incr(relevant, a.title, score, "category match");
+                    incr(relevant, a.title, score, "deep category match");
                 }
             })
         }
@@ -79,9 +80,16 @@ function pruneModel(model, focusedTitle) {
 
     // Rank articles
     const {relevant, relevantByScore} = relevantArticlesRank(model, focusedTitle);
+    for(let score of Object.keys(relevantByScore).sort((a,b)=>a-b)) {
+        const articles = relevantByScore[score];
+        for(let article of Object.values(articles)) {
+            console.log(String(score).substr(0,4) + "     " + article);
+        }
+    }
 
     // Prune articles that rank poorly from model
     const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
+    console.log("Maxscore=" + maxScore);
     for(let [title, score] of Object.entries(relevant)) {
         if (score <= maxScore*0.3) {
             model.deleteArticle(title);
@@ -102,4 +110,6 @@ function pruneModel(model, focusedTitle) {
             delete categories[title];
         }
     }
+
+    // TODO: exclude pages with category "Disambiguation pages"
 }
