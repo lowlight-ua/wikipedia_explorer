@@ -91,7 +91,8 @@ function pruneModel(model, focusedTitle) {
     const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
     console.log("Maxscore=" + maxScore);
     for(let [title, score] of Object.entries(relevant)) {
-        if (score <= maxScore*0.3) {
+        if (score <= maxScore*0.1) {
+            console.log("Pruning '" + title + "' because score " + score);
             model.deleteArticle(title);
         }
     }
@@ -107,6 +108,7 @@ function pruneModel(model, focusedTitle) {
     // Prune categories with less than 2 articles from model
     for (let [title, c] of Object.entries(categories)) {
         if (c.articles.size < 2) {
+            console.log("Pruning category '" + title + "' because not enough articles");
             delete categories[title];
         }
     }
