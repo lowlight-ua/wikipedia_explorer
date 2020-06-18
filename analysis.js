@@ -91,7 +91,7 @@ function pruneModel(model, focusedTitle) {
     const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
     console.log("Maxscore=" + maxScore);
     for(let [title, score] of Object.entries(relevant)) {
-        if (score <= maxScore*0.1) {
+        if (score <= maxScore*0.3) {
             console.log("Pruning '" + title + "' because score " + score);
             model.deleteArticle(title);
         }
@@ -105,10 +105,28 @@ function pruneModel(model, focusedTitle) {
         }
     }
 
+    function hasFamily(cat) {
+        let ctr = 0;
+        for(let c of cat.children) {
+            if (model.categories[c]) { return true; }
+        }
+        for(let c of cat.parents) {
+            if (model.categories[c]) { return true; }
+        }
+        return false;
+    }
+
     // Prune categories with less than 2 articles from model
     for (let [title, c] of Object.entries(categories)) {
         if (c.articles.size < 2) {
-            console.log("Pruning category '" + title + "' because not enough articles");
+            console.log("Pruning(A) category '" + title + "' because not enough articles");
+            delete categories[title];
+        }
+    }
+    for (let [title, c] of Object.entries(categories)) {
+        const hf = hasFamily(c);
+        if (!hf && c.articles.size < 4) {
+            console.log("Pruning(B) category '" + title + "' because not enough articles");
             delete categories[title];
         }
     }
