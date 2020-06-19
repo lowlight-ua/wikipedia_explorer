@@ -74,18 +74,9 @@ function relevantArticlesRank(model, title) {
 
 // ============================================================================
 
-function pruneModel(model, focusedTitle) {
+function pruneModel(model, focusedTitle, relevant, relevantByScore) {
     const articles = model.articles;
     const categories = model.categories;
-
-    // Rank articles
-    const {relevant, relevantByScore} = relevantArticlesRank(model, focusedTitle);
-    for(let score of Object.keys(relevantByScore).sort((a,b)=>a-b)) {
-        const articles = relevantByScore[score];
-        for(let article of Object.values(articles)) {
-            console.log(String(score).substr(0,4) + "     " + article);
-        }
-    }
 
     // Prune articles that rank poorly from model
     const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));

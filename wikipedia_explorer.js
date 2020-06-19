@@ -45,8 +45,17 @@ class Explorer
         console.log("Phase 3 done");     
         console.debug(this.model);
 
+        // Rank articles
+        const {relevant, relevantByScore} = relevantArticlesRank(this.model, this.title);
+        for(let score of Object.keys(relevantByScore).sort((a,b)=>a-b)) {
+            const articles = relevantByScore[score];
+            for(let article of Object.values(articles)) {
+                console.log(String(score).substr(0,4) + "     " + article);
+            }
+        }
+
         console.log("Pruning");     
-        pruneModel(this.model, this.title);
+        pruneModel(this.model, this.title, relevant, relevantByScore);
         console.debug(this.model);
 
         const dot = generateDot(this.model, this.title);
