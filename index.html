@@ -26,7 +26,8 @@ function onGoClick() {
     expl.run(thePage);
 }
 
-$(document).ready(function() {    
+$(document).ready(function() {   
+    $("#wait_anim").hide(); 
     $("#gobutton").click(onGoClick);
 });
 
@@ -36,11 +37,12 @@ $(document).ready(function() {
 
 <body>
 
-<input type="text" id="pagetitle"><br>
-<input type="button" id="gobutton" value="GO">
+<input type="text" id="pagetitle">
+<input type="button" id="gobutton" value="     Create graph     "> <BR><BR>
+<img id="wait_anim" src="https://i.stack.imgur.com/FhHRx.gif"> 
 
-<div id="output_div">
-</div>
+<pre id="progress_div"></pre>
+<div id="output_div"></div>
 
 </body>
 

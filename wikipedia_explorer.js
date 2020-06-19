@@ -11,6 +11,9 @@ class Explorer
     }
 
     run(title) {
+        $("#progress_div").html("Phase 1 of 3");
+        $("#wait_anim").show();
+
         // Title of the focused article, i.e. the article that is entered into the text box.
         this.title = title;
 
@@ -24,6 +27,7 @@ class Explorer
 
     onArticlesGathered() {
         console.log("Phase 1 done");
+        $("#progress_div").html("Phase 2 of 3");
         console.log(this.model.articles[this.title]);
         console.debug(this.model);
         // Phase 2: gather information about newly discovered articles and categories.
@@ -33,7 +37,8 @@ class Explorer
     }
 
     onCategoriesAssigned() {
-        console.log("Phase 2 done");        
+        console.log("Phase 2 done");     
+        $("#progress_div").html("Phase 3 of 3");
         console.debug(this.model);
 
         const thisObj = this;
@@ -43,6 +48,7 @@ class Explorer
 
     onCategoryTreeBuilt() {
         console.log("Phase 3 done");     
+        $("#progress_div").html("");
         console.debug(this.model);
 
         // Rank articles
@@ -63,6 +69,7 @@ class Explorer
         const dot = generateDot(this.model, this.title, relevant, maxScore);
         var svg = Viz(dot, "svg");
         $("#output_div").html(svg);
+        $("#wait_anim").hide(); 
 
         const thisObj = this;
         $('text').click(function() {
