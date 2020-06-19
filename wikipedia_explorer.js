@@ -46,7 +46,8 @@ class Explorer
         console.debug(this.model);
 
         // Rank articles
-        const {relevant, relevantByScore} = relevantArticlesRank(this.model, this.title);
+        const relevant = relevantArticlesRank(this.model, this.title);
+        const relevantByScore = sortByScore(relevant);
         for(let score of Object.keys(relevantByScore).sort((a,b)=>a-b)) {
             const articles = relevantByScore[score];
             for(let article of Object.values(articles)) {

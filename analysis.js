@@ -58,9 +58,11 @@ function relevantArticlesRank(model, title) {
             })
         }
     }
-     
-    // -------------------------------------------------
 
+    return relevant;
+}
+ 
+function sortByScore(relevant) {
     let relevantByScore = {};
     for(let [title, score] of Object.entries(relevant)) {
         if (relevantByScore[score] === undefined) {
@@ -69,7 +71,7 @@ function relevantArticlesRank(model, title) {
         relevantByScore[score].push(title);
     }
 
-    return {relevant, relevantByScore};
+    return relevantByScore;
 }
 
 // ============================================================================
