@@ -37,7 +37,10 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const a of c.articles) {
             const yellow = a==highlightTitle ? '[fillcolor="#FFFFB0"]' : '';
-            dot += ('"' + ctr + '" [label="' + a + '"] ' + yellow + ' ' + href(a) + '\n');
+            const relRelevance = relevant[a] / maxScore;
+            const color = (1 - relRelevance);
+            const colorStr = '[fontcolor="0 0 ' + color + '"]'
+            dot += ('"' + ctr + '" [label="' + a + '"] ' + yellow + ' ' + colorStr + ' ' + href(a) + '\n');
             ctr++;
         }
     }
