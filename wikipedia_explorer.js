@@ -64,9 +64,13 @@ class Explorer
         var svg = Viz(dot, "svg");
         $("#output_div").html(svg);
 
+        const thisObj = this;
         $('text').click(function() {
-            const thisObj = $(this);
-            console.log(thisObj.parent().attr('xlink:href'));
+            const item = $(this);
+            const href = item.parent().attr('xlink:href');
+            const title = item.text();
+            $('#pagetitle').val(title);
+            thisObj.run(title);
             return false;
         });
 
