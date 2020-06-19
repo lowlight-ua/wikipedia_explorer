@@ -59,7 +59,8 @@ class Explorer
         pruneModel(this.model, this.title, relevant, relevantByScore);
         console.debug(this.model);
 
-        const dot = generateDot(this.model, this.title);
+        const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
+        const dot = generateDot(this.model, this.title, relevant, maxScore);
         var svg = Viz(dot, "svg");
         $("#output_div").html(svg);
 

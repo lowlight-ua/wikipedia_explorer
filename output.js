@@ -1,4 +1,4 @@
-function generateDot(model, highlightTitle) {
+function generateDot(model, highlightTitle, relevant, maxScore) {
     function cTrim(c) {
         return c.substring(9);
     }
