@@ -34,6 +34,7 @@ class Category
 class Article 
 {
     title;
+    openingText;
 
     // Related articles. All entries are arrays of article titles (strings).
 
