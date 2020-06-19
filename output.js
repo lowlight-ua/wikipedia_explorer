@@ -38,7 +38,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         for(const a of c.articles) {
             const yellow = a==highlightTitle ? '[fillcolor="#FFFFB0"]' : '';
             const relRelevance = relevant[a] / maxScore;
-            const color = (1 - relRelevance);
+            const color = a==highlightTitle ? 0 : (1 - relRelevance) * 0.8;
             const colorStr = '[fontcolor="0 0 ' + color + '"]'
             dot += ('"' + ctr + '" [label="' + a + '"] ' + yellow + ' ' + colorStr + ' ' + href(a) + '\n');
             ctr++;
@@ -54,7 +54,10 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
             }
         }
         for(const a of c.articles) {
-            dot += ('"' + cTrim(ctitle) + '" -> "' + ctr + '" [color="#B0B0B0"]\n');
+            const relRelevance = relevant[a] / maxScore;
+            const color = a==highlightTitle ? 0.5 : 0.5 + 0.5*(1 - relRelevance);
+            const colorStr = '[color="0 0 ' + color + '"]'
+                        dot += ('"' + cTrim(ctitle) + '" -> "' + ctr + '" ' + colorStr + '\n');
             ctr++;
         }
     }
