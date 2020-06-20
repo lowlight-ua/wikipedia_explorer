@@ -41,7 +41,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
             const color = a==highlightTitle ? 0 : (1 - relRelevance) * 0.8;
             const colorStr = '[fontcolor="0 0 ' + color + '"]'
             const aObj = model.articles[a];
-            const toolTip = '[tooltip="' + aObj.openingText.replace(/"/g, "''") + '"]';
+            const toolTip = aObj.openingText ? '[tooltip="' + aObj.openingText.replace(/"/g, "''") + '"]' : "";
             dot += ('"' + ctr + '" [label="' + a + '"] ' + yellow + ' ' + colorStr + ' ' + toolTip + ' ' + href(a) + '\n');
             ctr++;
         }

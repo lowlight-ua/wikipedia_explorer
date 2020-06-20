@@ -4,8 +4,10 @@
 <style>
 </style>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="http://viz-js.com/bower_components/viz.js/viz.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
 <script src="model.js"></script>
 <script src="api_base.js"></script>
 <script src="api_phase1.js"></script>
@@ -29,6 +31,31 @@ function onGoClick() {
 $(document).ready(function() {   
     $("#wait_anim").hide(); 
     $("#gobutton").click(onGoClick);
+
+
+    $("#pagetitle").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+                url: "http://en.wikipedia.org/w/api.php",
+                dataType: "jsonp",
+                data: {
+                    'action': "opensearch",
+                    'format': "json",
+                    'search': request.term
+                },
+                success: function(data) {
+                    response(data[1]);
+                }
+            });
+        }
+    }).on("autocompleteselect", function( event, ui ) {
+        onGoClick();
+    }).keyup(function(e) {
+        if(e.keyCode == 13) {
+            $("#pagetitle").autocomplete( "close" );
+            onGoClick();
+        }
+    });
 });
 
 </script>
@@ -37,8 +64,8 @@ $(document).ready(function() {
 
 <body>
 
-<input type="text" id="pagetitle">
-<input type="button" id="gobutton" value="     Create graph     "> <BR><BR>
+<input type="text" class="ui-widget" style="width: 500px;" id="pagetitle">
+<input type="button" id="gobutton" class="ui-widget" value="     Create graph     "> <BR><BR>
 <img id="wait_anim" src="https://i.stack.imgur.com/FhHRx.gif"> 
 
 <pre id="progress_div"></pre>

@@ -11,6 +11,7 @@ class Explorer
     }
 
     run(title) {
+        $("#output_div").html("");
         $("#progress_div").html("Phase 1 of 3");
         $("#wait_anim").show();
 
