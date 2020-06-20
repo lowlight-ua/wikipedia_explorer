@@ -10,7 +10,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
 
     function printCategory(c) {
         const fontSize = 8 + (c.articles.size + c.children.size) * 0.6;
-        dot += ('"' + cTrim(c.title) + '" [fontsize=' + fontSize + '] ' + href(c.title) + '\n');
+        return ('"' + cTrim(c.title) + '" [fontsize=' + fontSize + '] ' + href(c.title) + '\n');
     }
 
     function printArticle(a, aid) {
@@ -20,7 +20,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         const colorStr = '[fontcolor="0 0 ' + color + '"]'
         const aObj = model.articles[a];
         const toolTip = aObj.openingText ? '[tooltip="' + aObj.openingText.replace(/"/g, "''") + '"]' : "";
-        dot += ('"' + aid + '" [label="' + a + '"] ' + yellow + ' ' + colorStr + ' ' + toolTip + ' ' + href(a) + '\n');
+        return ('"' + aid + '" [label="' + a + '"] ' + yellow + ' ' + colorStr + ' ' + toolTip + ' ' + href(a) + '\n');
     };
 
     let dot = new String();   
@@ -33,11 +33,11 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
     
     // Nodes
     for (const [ctitle, c] of Object.entries(model.categories)) {
-        printCategory(c);
+        dot += printCategory(c);
         for(const p of c.parents) {
             const pObj = model.categories[p];
             if(pObj) {
-                printCategory(pObj);
+                dot += printCategory(pObj);
             }
         }
     }
@@ -46,7 +46,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const a of c.articles) {
-            printArticle(a, aid);
+            dot += printArticle(a, aid);
             aid++;
         }
     }
