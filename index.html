@@ -48,8 +48,6 @@ $(document).ready(function() {
                 }
             });
         }
-    }).on("autocompleteselect", function( event, ui ) {
-        onGoClick();
     }).keyup(function(e) {
         if(e.keyCode == 13) {
             $("#pagetitle").autocomplete( "close" );
