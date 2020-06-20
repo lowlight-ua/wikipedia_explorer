@@ -24,6 +24,13 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         return ('"' + aid + '" [label="' + a + '"] ' + yellow + ' ' + colorStr + ' ' + toolTip + ' ' + href(a) + '\n');
     };
 
+    function printArticleEdge(ctitle, a, aid) {
+        const relRelevance = relevant[a] / maxScore;
+        const color = a==highlightTitle ? 0.5 : 0.5 + 0.5*(1 - relRelevance);
+        const colorStr = '[color="0 0 ' + color + '"]';
+        return ('"' + cTrim(ctitle) + '" -> "' + aid + '" ' + colorStr + '\n');
+    }
+
     let dot = new String();   
     dot += ('digraph { \nrankdir="LR" ' +
         'nodesep=0.3 \n' + 
@@ -62,10 +69,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
             }
         }
         for(const a of c.articles) {
-            const relRelevance = relevant[a] / maxScore;
-            const color = a==highlightTitle ? 0.5 : 0.5 + 0.5*(1 - relRelevance);
-            const colorStr = '[color="0 0 ' + color + '"]'
-                        dot += ('"' + cTrim(ctitle) + '" -> "' + aid + '" ' + colorStr + '\n');
+            dot += printArticleEdge(ctitle, a, aid);
             aid++;
         }
     }
@@ -76,7 +80,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
             aid++;
         }
     }
-    
+
     dot += ('}');
 
     return dot;
