@@ -33,7 +33,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
 
     let dot = new String();   
     dot += ('digraph { \nrankdir="LR" ' +
-        'nodesep=0.3 \n' + 
+        'graph [nodesep=0] \n' + 
         'node [fontname="Helvetica"]\n' +
         'node [shape=box height=0.4 fontsize=10 style=filled fillcolor="#e0e0e0"]\n' +
         'edge [dir=none]\n');
@@ -50,7 +50,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         }
     }
     dot += ('nodesep=0.1 ' + 
-        'node [shape=none height=0 fontsize=8 style=filled fillcolor="#ffffff"]\n');
+        'node [shape=none height=0 fontsize=8 margin="0.11,0.02" style=filled fillcolor="#ffffff"]\n');
 
     let articleSet = new Set();        
     for (const [ctitle, c] of Object.entries(model.categories)) {
