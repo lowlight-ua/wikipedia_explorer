@@ -74,10 +74,21 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         }
     }
 
-    for (const a of Object.keys(model.articles)) {
+    for (const [a, aObj] of Object.entries(model.articles)) {
         if (!articleSet.has(a)) {
-            dot += printArticle(a, aid);
-            aid++;
+            let tethered = false;
+            for(const c of aObj.categoriesDeep) {
+                if (model.categories[c]) {
+                    dot += printArticle(a, aid);
+                    dot += printArticleEdge(c, a, aid);
+                    aid++;
+                    tethered = true;
+                }
+            }
+            if (!tethered) {
+                dot += printArticle(a, aid);
+                aid++;
+            }
         }
     }
 
