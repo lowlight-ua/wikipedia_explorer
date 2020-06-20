@@ -20,6 +20,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         const colorStr = '[fontcolor="0 0 ' + color + '"]'
         const aObj = model.articles[a];
         const toolTip = aObj.openingText ? '[tooltip="' + aObj.openingText.replace(/"/g, "''") + '"]' : "";
+        articleSet.add(a);
         return ('"' + aid + '" [label="' + a + '"] ' + yellow + ' ' + colorStr + ' ' + toolTip + ' ' + href(a) + '\n');
     };
 
@@ -43,7 +44,8 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
     }
     dot += ('nodesep=0.1 ' + 
         'node [shape=none height=0 fontsize=8 style=filled fillcolor="#f0f0f0"]\n');
-        
+
+    let articleSet = new Set();        
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const a of c.articles) {
             dot += printArticle(a, aid);
@@ -67,6 +69,14 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
             aid++;
         }
     }
+
+    for (const a of Object.keys(model.articles)) {
+        if (!articleSet.has(a)) {
+            dot += printArticle(a, aid);
+            aid++;
+        }
+    }
+    
     dot += ('}');
 
     return dot;
