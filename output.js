@@ -13,13 +13,23 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         dot += ('"' + cTrim(c.title) + '" [fontsize=' + fontSize + '] ' + href(c.title) + '\n');
     }
 
+    function printArticle(a, aid) {
+        const yellow = a==highlightTitle ? '[fillcolor="#FFFFB0"]' : '';
+        const relRelevance = relevant[a] / maxScore;
+        const color = a==highlightTitle ? 0 : (1 - relRelevance) * 0.8;
+        const colorStr = '[fontcolor="0 0 ' + color + '"]'
+        const aObj = model.articles[a];
+        const toolTip = aObj.openingText ? '[tooltip="' + aObj.openingText.replace(/"/g, "''") + '"]' : "";
+        dot += ('"' + aid + '" [label="' + a + '"] ' + yellow + ' ' + colorStr + ' ' + toolTip + ' ' + href(a) + '\n');
+    };
+
     let dot = new String();   
     dot += ('digraph { \nrankdir="LR" ' +
         'nodesep=0.3 \n' + 
         'node [fontname="Helvetica"]\n' +
         'node [shape=box height=0.4 fontsize=10 style=filled fillcolor="#e0e0e0"]\n' +
         'edge [dir=none]\n');
-    let ctr = 0;
+    let aid = 0;
     
     // Nodes
     for (const [ctitle, c] of Object.entries(model.categories)) {
@@ -36,18 +46,12 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const a of c.articles) {
-            const yellow = a==highlightTitle ? '[fillcolor="#FFFFB0"]' : '';
-            const relRelevance = relevant[a] / maxScore;
-            const color = a==highlightTitle ? 0 : (1 - relRelevance) * 0.8;
-            const colorStr = '[fontcolor="0 0 ' + color + '"]'
-            const aObj = model.articles[a];
-            const toolTip = aObj.openingText ? '[tooltip="' + aObj.openingText.replace(/"/g, "''") + '"]' : "";
-            dot += ('"' + ctr + '" [label="' + a + '"] ' + yellow + ' ' + colorStr + ' ' + toolTip + ' ' + href(a) + '\n');
-            ctr++;
+            printArticle(a, aid);
+            aid++;
         }
     }
 
-    ctr = 0;
+    aid = 0;
     // Edges
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const p of c.parents) {
@@ -59,8 +63,8 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
             const relRelevance = relevant[a] / maxScore;
             const color = a==highlightTitle ? 0.5 : 0.5 + 0.5*(1 - relRelevance);
             const colorStr = '[color="0 0 ' + color + '"]'
-                        dot += ('"' + cTrim(ctitle) + '" -> "' + ctr + '" ' + colorStr + '\n');
-            ctr++;
+                        dot += ('"' + cTrim(ctitle) + '" -> "' + aid + '" ' + colorStr + '\n');
+            aid++;
         }
     }
     dot += ('}');
