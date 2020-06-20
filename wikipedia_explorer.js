@@ -78,7 +78,7 @@ class Explorer
             const href = item.parent().attr('xlink:href');
             const title = item.text();
             $('#pagetitle').val(title);
-            thisObj.run(title);
+            onGoClick();
             return false;
         });
 

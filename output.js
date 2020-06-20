@@ -50,7 +50,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         }
     }
     dot += ('nodesep=0.1 ' + 
-        'node [shape=none height=0 fontsize=8 style=filled fillcolor="#f0f0f0"]\n');
+        'node [shape=none height=0 fontsize=8 style=filled fillcolor="#ffffff"]\n');
 
     let articleSet = new Set();        
     for (const [ctitle, c] of Object.entries(model.categories)) {
