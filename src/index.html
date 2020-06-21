@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><title>Wikipedia explorer</title>
 <style>
 </style>
 
@@ -108,7 +108,17 @@ $(document).ready(function() {
 <body>
 
 <div class="ui-widget">
-Enter a title of an english Wikipedia article. Click "Explore" to see a graph of related articles and categories.
+<ul>
+    <li>Enter a title of an English Wikipedia article.</li>
+    <li> Click "Explore" to see a graph of related and connected articles and categories.</li>
+    <li> In the resulting graph, 
+        <ul>
+        <li>Click on a link to rebuild the graph around the item.</li>
+        <li>Click on a link to rebuild the graph around the item.</li>
+        <li>Open a link in a new window to see relevant Wikipedia entry.</li>
+        </ul>
+    </li>
+</ul>
 <div style="height: 25px"></div>
 <input type="text" style="width: 400px;" id="pagetitle">
 <input type="button" id="gobutton" value="     Explore     ">
