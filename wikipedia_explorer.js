@@ -7,10 +7,12 @@ let expl = {};
 class Explorer 
 {
     gui;
+    options;
 
-    constructor(gui) {
+    constructor(gui, options) {
         this.model = new Model();
         this.gui = gui;
+        this.options = options;
     }
 
     run(title) {
@@ -33,7 +35,7 @@ class Explorer
             console.log("Phase 1: resorting to plain search");
             const transaction = new ApiTransaction(this.onPhase1Complete.bind(this));
             new ApiCall_Search(transaction, this.model, this.title, ApiCall_Search.modes.PLAIN).run();
-            this.gui.setError("Note: there is no Wikipedia article with this name. Results might be underwhelming or missing.");
+            this.gui.setError("Note: there is no Wikipedia article with this name. Results might be irrelevant, limited, or missing.");
         } else {
             this.onPhase1Complete();
         }
@@ -75,7 +77,8 @@ class Explorer
         }
 
         console.log("Pruning");     
-        pruneModel(this.model, this.title, relevant, relevantByScore);
+        const cutoff = parseFloat(this.options.cutoff);
+        pruneModel(this.model, this.title, cutoff, relevant, relevantByScore);
         console.debug(this.model);
 
         const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));

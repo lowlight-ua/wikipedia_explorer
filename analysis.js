@@ -76,15 +76,17 @@ function sortByScore(relevant) {
 
 // ============================================================================
 
-function pruneModel(model, focusedTitle, relevant, relevantByScore) {
+function pruneModel(model, focusedTitle, cutoff, relevant, relevantByScore) {
     const articles = model.articles;
     const categories = model.categories;
+
+    cutoff = isNaN(cutoff) ? 0.3 : cutoff;
 
     // Prune articles that rank poorly from model
     const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
     console.log("Maxscore=" + maxScore);
     for(let [title, score] of Object.entries(relevant)) {
-        if (score <= maxScore*0.3) {
+        if (score <= maxScore*cutoff) {
             console.log("Pruning '" + title + "' because score " + score);
             model.deleteArticle(title);
         }

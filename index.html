@@ -30,7 +30,12 @@ function onGoClick() {
         setStatus,
         setError
     };
-    expl = new Explorer(guiCallbacks);
+
+    let options = {
+        cutoff: $("#cutoff").val()
+    }
+
+    expl = new Explorer(guiCallbacks, options);
     expl.run(thePage);
 }
 
@@ -100,13 +105,25 @@ $(document).ready(function() {
 
 <div class="ui-widget">
 Enter a title of an english Wikipedia article. Click "Explore" to see a graph of related articles and categories.
-</div><BR>
-<input type="text" class="ui-widget" style="width: 400px;" id="pagetitle">
-<input type="button" id="gobutton" class="ui-widget" value="     Explore     "> <BR><BR>
+<BR><BR>
+<input type="text" style="width: 400px;" id="pagetitle">
+<input type="button" id="gobutton" value="     Explore     ">
+
+<span style="display: inline-block; width: 30px;"></span>
+<span class="ui-widget">Output density: </span>
+<select id="cutoff" class="ui-widget">
+    <option value="0.1">Dense</option>
+    <option value="0.3" selected="selected">Normal</option>
+    <option value="0.5">Sparse</option>
+    <option value="0.7">Minimal</option>
+</select>
+
+<BR><BR>
 <img id="wait_anim" src="https://i.stack.imgur.com/FhHRx.gif"> 
 
 <pre id="progress_div"></pre>
-<div id="error_div" class="ui-widget" style="color: red; font-size: small;" ></div>
+<div id="error_div" style="color: red; font-size: small;" ></div>
+</div>
 <BR>
 <div id="output_div"></div>
 
