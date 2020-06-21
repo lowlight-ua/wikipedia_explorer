@@ -42,17 +42,15 @@ class ApiCall_Categories extends ApiCallBase
         const qp = data.query.pages;
         const model = this.model;
         for (let page of Object.values(qp)) {
-            if (page.missing === undefined) {
-                const title = page.title;
-                const cirrusDoc = page.cirrusdoc[0];
-                const article = model.articles[title];
-                if(article) {
-                    const categories = page.categories;
-                    if (categories) {
-                        categories.forEach(i => model.articleCategories(article, i.title));
-                    }
-                    article.openingText = cirrusDoc.source.opening_text;
+            const title = page.title;
+            const cirrusDoc = page.cirrusdoc[0];
+            const article = model.articles[title];
+            if(article) {
+                const categories = page.categories;
+                if (categories) {
+                    categories.forEach(i => model.articleCategories(article, i.title));
                 }
+                article.openingText = cirrusDoc.source.opening_text;
             }
         }
     }

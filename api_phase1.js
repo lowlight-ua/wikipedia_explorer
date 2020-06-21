@@ -72,15 +72,17 @@ class ApiCall_Query1 extends ApiCallByTitle
         // Incoming links        
         dqs.forEach(i => model.articleLinkTo(article, i.title));
 
-        if(dqp0.missing === undefined) {
-            // Outgoing links
-            const links = dqp0.links;
-            links.forEach(i => model.articleLinkFrom(article, i.title));
-
-            // Page assessments
-            const ass = dqp0.pageassessments;    // ;)
-            article.assessments = ass;
+        if(dqp0.missing !== undefined) {
+            this.transaction.abort(Explorer.error.NO_ARTICLE);
+            return;
         }
+        // Outgoing links
+        const links = dqp0.links;
+        links.forEach(i => model.articleLinkFrom(article, i.title));
+
+        // Page assessments
+        const ass = dqp0.pageassessments;    // ;)
+        article.assessments = ass;
     }
 }
 
@@ -100,13 +102,12 @@ class ApiCall_Query2 extends ApiCallByTitle
 
     run() {
         const title = this.title;
-        const safemode = Object.keys(this.model.articles).length < 2;
         
         super.run({
             data: {
                 action: 'query',
                 list: 'search',                 
-                srsearch: safemode ? title : 'morelike:' + title,
+                srsearch: 'morelike:' + title,
                 srlimit: 50,
             }
         });
@@ -185,20 +186,18 @@ class ApiCall_Parse extends ApiCallByTitle
     }
 
     onDone(data) {
-        if (data.parse !== undefined) {
-            const sections = data.parse.sections;
-            let seeAlsoIndex = undefined;
+        const sections = data.parse.sections;
+        let seeAlsoIndex = undefined;
 
-            for (let i of Object.values(sections)) {
-                if(i.line === "See also") {
-                    seeAlsoIndex = i.index;
-                    break;
-                }
+        for (let i of Object.values(sections)) {
+            if(i.line === "See also") {
+                seeAlsoIndex = i.index;
+                break;
             }
-        
-            if(seeAlsoIndex !== undefined) {
-                new ApiCall_SectionLinks(this.transaction, this.model, this.title, seeAlsoIndex).run();
-            }
+        }
+
+        if(seeAlsoIndex !== undefined) {
+            new ApiCall_SectionLinks(this.transaction, this.model, this.title, seeAlsoIndex).run();
         }
     }
 }
