@@ -95,7 +95,10 @@ function pruneModel(model, focusedTitle, cutoff, relevant, relevantByScore) {
     const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
     console.log("Maxscore=" + maxScore);
     for(let [title, score] of Object.entries(relevant)) {
-        if (score <= maxScore*cutoff) {
+        const cut = cutoff == 0 
+            ? score <= 1
+            : score <= maxScore*cutoff;
+        if (cut) {
             console.log("Pruning '" + title + "' because score " + score);
             model.deleteArticle(title);
         }
