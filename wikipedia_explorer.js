@@ -33,8 +33,8 @@ class Explorer
         this.gui.setStatus("Phase 2 of 3");
         console.log(this.model.articles[this.title]);
         console.debug(this.model);
-        // Phase 2: gather information about newly discovered articles and categories.
 
+        // Phase 2: gather information about newly discovered articles and categories.
         const transaction = new ApiTransaction(this.onCategoriesAssigned.bind(this)); 
         new ApiCall_Categories(transaction, this.model).run();
     }
