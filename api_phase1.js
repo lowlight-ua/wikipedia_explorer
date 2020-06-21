@@ -16,7 +16,7 @@
 // - "Page assessments" (WikiProject and article quality assessment).
 // Creates article and category objects in `Model` for referenced articles and categories.
 
-class ApiCall_Query1 extends ApiCallByTitle 
+class ApiCall_Init extends ApiCallByTitle 
 {
     constructor(transaction, model, title) {
         super(transaction, model, title);
@@ -94,7 +94,7 @@ class ApiCall_Query1 extends ApiCallByTitle
 // - List of relevant articles, sorted by relevance.
 // Creates article and category objects in `Model` for referenced articles and categories.
 
-class ApiCall_Query2 extends ApiCallByTitle 
+class ApiCall_Search extends ApiCallByTitle 
 {
     constructor(transaction, model, title) {
         super(transaction, model, title);
@@ -118,11 +118,12 @@ class ApiCall_Query2 extends ApiCallByTitle
         const article = model.articles[this.title];
         const dqs = data.query.search;
         dqs.forEach(i => model.articleMoreLike(article, i.title));
-    }}
+    }
+}
 
 // ============================================================================
 
-// A sub-API-call for the ApiCall_Parse API call. 
+// A sub-API-call for the ApiCall_Sections API call. 
 // For the focused article, gets links from a specific section.
 
 class ApiCall_SectionLinks extends ApiCallByTitle
@@ -169,7 +170,7 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 // - Links outgoing from the "see also" section.
 // Creates article and category objects in `Model` for referenced articles and categories.
 
-class ApiCall_Parse extends ApiCallByTitle 
+class ApiCall_Sections extends ApiCallByTitle 
 {
     constructor(transaction, model, title) {
         super(transaction, model, title);

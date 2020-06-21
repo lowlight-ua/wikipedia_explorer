@@ -23,9 +23,9 @@ class Explorer
         // Phase 1: gather information about the focused article.
         this.model.articles[title] = new Article(title);
         const transaction = new ApiTransaction(this.onArticlesGathered.bind(this));
-        new ApiCall_Query1(transaction, this.model, title).run();
-        new ApiCall_Query2(transaction, this.model, title).run();
-        new ApiCall_Parse(transaction, this.model, title).run();
+        new ApiCall_Init(transaction, this.model, title).run();
+        new ApiCall_Search(transaction, this.model, title).run();
+        new ApiCall_Sections(transaction, this.model, title).run();
     }
 
     onArticlesGathered(error) {
