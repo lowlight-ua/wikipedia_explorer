@@ -22,7 +22,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
     function printArticle(a, aid) {
         const yellow = a==highlightTitle ? '[fillcolor="#FFFFB0"]' : '';
         const relRelevance = relevant[a] / maxScore;
-        const color = a==highlightTitle ? 0 : (1 - relRelevance) * 0.8;
+        const color = a==highlightTitle ? 0 : (1 - relRelevance) * 0.6;
         const colorStr = '[fontcolor="0 0 ' + color + '"]'
         const aObj = model.articles[a];
         const toolTip = aObj.openingText ? '[tooltip="' + aObj.openingText.replace(/"/g, "''") + '"]' : "";
@@ -32,7 +32,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
 
     function printArticleEdge(ctitle, a, aid) {
         const relRelevance = relevant[a] / maxScore;
-        const color = a==highlightTitle ? 0.5 : 0.5 + 0.5*(1 - relRelevance);
+        const color = a==highlightTitle ? 0 : 0.4 + ((1 - relRelevance) * 0.4);
         const colorStr = '[color="0 0 ' + color + '"]';
         return ('"' + cTrim(ctitle) + '" -> "' + aid + '" ' + colorStr + '\n');
     }
@@ -41,7 +41,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
 
     let dot = new String();   
     dot += ('digraph { \nrankdir="LR" ' +
-        'graph [nodesep=0] \n');
+        'graph [nodesep=0 bgcolor="#E0E0E0"] \n');
 
     // aid is an "identifier" of an article. In this case it isn't used for identification, but only for
     // uniqueness. Since one article can "grow" from multiple categories, we need multiple graph nodes with
@@ -53,7 +53,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
     // Print the category nodes -----------------------------------------------
 
     dot += ('node [fontname="Helvetica"]\n' +
-        'node [shape=box height=0.4 fontsize=10 style=filled fillcolor="#e0e0e0"]\n' +
+        'node [shape=box height=0.4 fontsize=10 style=filled fillcolor="#ffffff"]\n' +
         'edge [dir=none]\n');
 
     for (const c of Object.values(model.categories)) {
@@ -63,7 +63,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
     // Print the article nodes ------------------------------------------------
 
     dot += ('nodesep=0.1 ' + 
-        'node [shape=none height=0 fontsize=8 margin="0.11,0.02" style=filled fillcolor="#ffffff"]\n');
+        'node [shape=none height=0 fontsize=8 margin="0.11,0.02" style=filled fillcolor="#E0E0E0"]\n');
 
     // Values: article titles. Keeps track of articles that were printed.
     let articleSet = new Set();
