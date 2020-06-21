@@ -1,6 +1,7 @@
 function relevantArticlesRank(model, title) {
     const article = model.articles[title];
     
+    // `relevant`: key = article title; value = article "score" that determines its rank later.
     let relevant = {};
     function incr(obj, title, by, because) {
         if(obj[title]===undefined)
@@ -10,19 +11,21 @@ function relevantArticlesRank(model, title) {
     }
     
     // Boost article if it links to the focused article
-    // Pre-sorted by descending relevance
     const linksTo = article.linksTo;
     const maxWeightLinksTo = 2;
     for (let i=0; i<linksTo.length; i++) {
+        // Pre-sorted by descending relevance, so the closer an article is to the beginning
+        // of the array, the greater score it gets.
         const weight = 1 + (linksTo.length - 1 - i) / linksTo.length * maxWeightLinksTo;
         incr(relevant, linksTo[i], Math.round(weight*100)/100, "in linksTo");
     }
 
     // Boost article if wikipedia's own search engine refers to it as relevant
-    // Pre-sorted by descending relevance
     const moreLike = article.moreLike;
     const maxWeightMoreLike = 4;
     for (let i=0; i<moreLike.length; i++) {
+        // Pre-sorted by descending relevance, so the closer an article is to the beginning
+        // of the array, the greater score it gets.
         const weight = 1 + (moreLike.length - 1 - i) / moreLike.length * maxWeightMoreLike;
         incr(relevant, moreLike[i], Math.round(weight*100)/100, "in moreLike");
     }
@@ -32,7 +35,7 @@ function relevantArticlesRank(model, title) {
         incr(relevant, article.linksFromSeeAlso[i], 3, "in see also");
     }
 
-    // Bump a bit, if there's otherwise an outgoing link
+    // Bump a bit, if there's an outgoing link
     for (let i=0; i<article.linksFrom.length; i++) {
         incr(relevant, article.linksFrom[i], 1, "in linksFrom");
     }
@@ -61,9 +64,13 @@ function relevantArticlesRank(model, title) {
 
     return relevant;
 }
+
+// ----------------------------------------------------------------------------
  
 function sortByScore(relevant) {
+    // key = score, value = array of articles that have the score
     let relevantByScore = {};
+
     for(let [title, score] of Object.entries(relevant)) {
         if (relevantByScore[score] === undefined) {
             relevantByScore[score] = [];
@@ -76,13 +83,15 @@ function sortByScore(relevant) {
 
 // ============================================================================
 
+// Based on article rank and category size, remove low-ranking articles or too-small categories.
+// Rules and constants were picked by trial and error for sensible graphs.
+
 function pruneModel(model, focusedTitle, cutoff, relevant, relevantByScore) {
     const articles = model.articles;
     const categories = model.categories;
 
-    cutoff = isNaN(cutoff) ? 0.3 : cutoff;
-
     // Prune articles that rank poorly from model
+    cutoff = isNaN(cutoff) ? 0.3 : cutoff;
     const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
     console.log("Maxscore=" + maxScore);
     for(let [title, score] of Object.entries(relevant)) {
@@ -100,6 +109,7 @@ function pruneModel(model, focusedTitle, cutoff, relevant, relevantByScore) {
         }
     }
 
+    // Does a category have "interesting" parents or children?
     function hasFamily(cat) {
         let ctr = 0;
         for(let c of cat.children) {
@@ -118,6 +128,8 @@ function pruneModel(model, focusedTitle, cutoff, relevant, relevantByScore) {
             delete categories[title];
         }
     }
+
+    // Prune categories without parents or children if they have less than 4 articles
     for (let [title, c] of Object.entries(categories)) {
         const hf = hasFamily(c);
         if (!hf && c.articles.size < 4) {

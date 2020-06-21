@@ -1,12 +1,9 @@
-// ----------------------------------------------------------------------------
-
 // In this file:
 // API calls associated with the first phase of data collection: gather information
-// about the focused article. This phase discovers related articles and categories,
+// about the focused article. This phase also discovers related articles and categories,
 // which will be used in phase2.
 
 // ----------------------------------------------------------------------------
-
 
 // Combined API call for all requests that can be fulfilled via the "query"
 // module of Wikimedia API. It's combined for performance reasons.
@@ -25,6 +22,12 @@ class ApiCall_Init extends ApiCallByTitle
     run() {
         // Todo: sanitize title to not interfere with the regexp
         const title = this.title;
+
+        // The Wikimedia API for backlinks works, but is very polluted by links from transcluded articles
+        // such as ubiquitous wikipedia templates. A workaround to get backlinks from the article only,
+        // and not from transcluded content, is to search for the link syntax ("[[title").
+        // The query is limited to the articles that backlink to the article (from transclusions or otherwise)
+        // for performance.
         const q = 'insource:/"[[' + title + '"/ linksto:"' + title + '"';
         
         super.run({
@@ -73,6 +76,7 @@ class ApiCall_Init extends ApiCallByTitle
         dqs.forEach(i => model.articleLinkTo(article, i.title));
 
         if(dqp0.missing !== undefined) {
+            // article not found
             this.transaction.abort(Explorer.error.NO_ARTICLE);
             return;
         }
@@ -91,7 +95,8 @@ class ApiCall_Init extends ApiCallByTitle
 // Another "query"-based API call, with requests that cannot be combined with the
 // first one.
 // Obtains for the focused article (of 'title'):
-// - List of relevant articles, sorted by relevance.
+// - List of relevant articles, sorted by relevance (in 'morelike' mode),
+// - or list of articles found by plain search, sorted by relevance (in 'plain' mode).
 // Creates article and category objects in `Model` for referenced articles and categories.
 
 class ApiCall_Search extends ApiCallByTitle 
@@ -181,6 +186,7 @@ class ApiCall_SectionLinks extends ApiCallByTitle
 // Obtains for the focused article (of 'title'):
 // - Sections, and finds "see also" section;
 // - Links outgoing from the "see also" section.
+// (Outbound links from "See also" will rank higher in the results.)
 // Creates article and category objects in `Model` for referenced articles and categories.
 
 class ApiCall_Sections extends ApiCallByTitle 

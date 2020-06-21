@@ -1,5 +1,11 @@
+// "Dot" is the name of the graph definition language Graphviz uses.
+
 function generateDot(model, highlightTitle, relevant, maxScore) {
+
+    // Helper functions -------------------------------------------------------
+
     function cTrim(c) {
+        // Trims 'Category:' from the string
         return c.substring(9);
     }
 
@@ -31,28 +37,37 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         return ('"' + cTrim(ctitle) + '" -> "' + aid + '" ' + colorStr + '\n');
     }
 
+    // ------------------------------------------------------------------------
+
     let dot = new String();   
     dot += ('digraph { \nrankdir="LR" ' +
-        'graph [nodesep=0] \n' + 
-        'node [fontname="Helvetica"]\n' +
-        'node [shape=box height=0.4 fontsize=10 style=filled fillcolor="#e0e0e0"]\n' +
-        'edge [dir=none]\n');
+        'graph [nodesep=0] \n');
+
+    // aid is an "identifier" of an article. In this case it isn't used for identification, but only for
+    // uniqueness. Since one article can "grow" from multiple categories, we need multiple graph nodes with
+    // the same title. The way Graphviz Dot allow it is by reusing same node label, but assigning a new
+    // identifier to every node.
+    
     let aid = 0;
     
-    // Nodes
-    for (const [ctitle, c] of Object.entries(model.categories)) {
+    // Print the category nodes -----------------------------------------------
+
+    dot += ('node [fontname="Helvetica"]\n' +
+        'node [shape=box height=0.4 fontsize=10 style=filled fillcolor="#e0e0e0"]\n' +
+        'edge [dir=none]\n');
+
+    for (const c of Object.values(model.categories)) {
         dot += printCategory(c);
-        for(const p of c.parents) {
-            const pObj = model.categories[p];
-            if(pObj) {
-                dot += printCategory(pObj);
-            }
-        }
     }
+
+    // Print the article nodes ------------------------------------------------
+
     dot += ('nodesep=0.1 ' + 
         'node [shape=none height=0 fontsize=8 margin="0.11,0.02" style=filled fillcolor="#ffffff"]\n');
 
-    let articleSet = new Set();        
+    // Values: article titles. Keeps track of articles that were printed.
+    let articleSet = new Set();
+    
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const a of c.articles) {
             dot += printArticle(a, aid);
@@ -60,8 +75,10 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
         }
     }
 
+    // Print edges (graph links) ----------------------------------------------
+
     aid = 0;
-    // Edges
+
     for (const [ctitle, c] of Object.entries(model.categories)) {
         for(const p of c.parents) {
             if(model.categories[p]) {
@@ -76,6 +93,8 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
 
     for (const [a, aObj] of Object.entries(model.articles)) {
         if (!articleSet.has(a)) {
+            // This is an article without any "interesting" category. We want to reduce these.
+            // Let's try to hang it onto a category that is not its direct parent, but is still in the parent chain.
             let tethered = false;
             for(const c of aObj.categoriesDeep) {
                 if (model.categories[c]) {
@@ -86,6 +105,7 @@ function generateDot(model, highlightTitle, relevant, maxScore) {
                 }
             }
             if (!tethered) {
+                // True orphan.
                 dot += printArticle(a, aid);
                 aid++;
             }

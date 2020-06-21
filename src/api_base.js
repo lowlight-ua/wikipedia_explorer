@@ -1,4 +1,4 @@
-// An API transaction represents a set of `ApiCallBase`s that run asynchronously in parallel.
+// An API transaction represents a set of `ApiCallBase` calls that run asynchronously in parallel.
 // The only point of a transaction is the ability to notify `onComplete` when the last call finishes.
 
 class ApiTransaction {
@@ -86,6 +86,8 @@ class ApiCallByTitle extends ApiCallBase
 }
 
 // ----------------------------------------------------------------------------
+
+// Convert an array of strings to a "titles" argument, in the format expected by Wikimedia API.
 
 function titlefy(titles, limit, callback) {
     let titleString = "";
