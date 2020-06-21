@@ -4,6 +4,7 @@
 class ApiTransaction {
     steps = 0;
     onComplete;
+    aborted = false;
 
     constructor(onComplete) {
         this.onComplete = onComplete;
@@ -14,8 +15,17 @@ class ApiTransaction {
     }
 
     onStepComplete() {
+    	if (this.aborted) {
+    		return;
+    	}
         this.steps--;
         if (this.steps == 0) { this.onComplete(); }
+    }
+
+    abort(msg) {
+    	this.aborted = true;
+    	this.steps = 0;
+        this.onComplete(msg);
     }
 }
 

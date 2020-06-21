@@ -72,6 +72,10 @@ class ApiCall_Query1 extends ApiCallByTitle
         // Incoming links        
         dqs.forEach(i => model.articleLinkTo(article, i.title));
 
+        if(dqp0.missing !== undefined) {
+            this.transaction.abort("The article does not exist.");
+            return;
+        }
         // Outgoing links
         const links = dqp0.links;
         links.forEach(i => model.articleLinkFrom(article, i.title));

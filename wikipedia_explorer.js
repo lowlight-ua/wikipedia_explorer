@@ -28,7 +28,13 @@ class Explorer
         new ApiCall_Parse(transaction, this.model, title).run();
     }
 
-    onArticlesGathered() {
+    onArticlesGathered(error) {
+        if (error) {
+            this.gui.onProcessEnd("");
+            this.gui.setStatus(error);
+            return;
+        }
+
         console.log("Phase 1 done");
         this.gui.setStatus("Phase 2 of 3");
         console.log(this.model.articles[this.title]);
