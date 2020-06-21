@@ -24,7 +24,7 @@ class Explorer
         this.model.articles[title] = new Article(title);
         const transaction = new ApiTransaction(this.onArticlesGathered.bind(this));
         new ApiCall_Init(transaction, this.model, title).run();
-        new ApiCall_Search(transaction, this.model, title).run();
+        new ApiCall_Search(transaction, this.model, title, ApiCall_Search.modes.MORELIKE).run();
         new ApiCall_Sections(transaction, this.model, title).run();
     }
 

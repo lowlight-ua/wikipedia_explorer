@@ -96,8 +96,14 @@ class ApiCall_Init extends ApiCallByTitle
 
 class ApiCall_Search extends ApiCallByTitle 
 {
-    constructor(transaction, model, title) {
+    mode; 
+
+    constructor(transaction, model, title, mode) {
+        if (mode === undefined) {
+            throw new Error("Undefined mode");
+        }
         super(transaction, model, title);
+        this.mode = mode;
     }
 
     run() {
@@ -107,7 +113,9 @@ class ApiCall_Search extends ApiCallByTitle
             data: {
                 action: 'query',
                 list: 'search',                 
-                srsearch: 'morelike:' + title,
+                srsearch: (this.mode === ApiCall_Search.modes.MORELIKE) 
+                    ? ('morelike:' + title) 
+                    : (title),
                 srlimit: 50,
             }
         });
@@ -119,6 +127,11 @@ class ApiCall_Search extends ApiCallByTitle
         const dqs = data.query.search;
         dqs.forEach(i => model.articleMoreLike(article, i.title));
     }
+}
+
+ApiCall_Search.modes = {
+    MORELIKE: Symbol(),
+    PLAIN:    Symbol()
 }
 
 // ============================================================================
