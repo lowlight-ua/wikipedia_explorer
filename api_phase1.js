@@ -200,18 +200,20 @@ class ApiCall_Sections extends ApiCallByTitle
     }
 
     onDone(data) {
-        const sections = data.parse.sections;
-        let seeAlsoIndex = undefined;
+        if (data.parse !== undefined) {
+            const sections = data.parse.sections;
+            let seeAlsoIndex = undefined;
 
-        for (let i of Object.values(sections)) {
-            if(i.line === "See also") {
-                seeAlsoIndex = i.index;
-                break;
+            for (let i of Object.values(sections)) {
+                if(i.line === "See also") {
+                    seeAlsoIndex = i.index;
+                    break;
+                }
             }
-        }
 
-        if(seeAlsoIndex !== undefined) {
-            new ApiCall_SectionLinks(this.transaction, this.model, this.title, seeAlsoIndex).run();
+            if(seeAlsoIndex !== undefined) {
+                new ApiCall_SectionLinks(this.transaction, this.model, this.title, seeAlsoIndex).run();
+            }
         }
     }
 }

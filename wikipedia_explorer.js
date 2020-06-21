@@ -29,12 +29,17 @@ class Explorer
     }
 
     onArticlesGathered(error) {
-        if (error) {
-            this.gui.onProcessEnd("");
-            this.gui.setError(error);
-            return;
+        if (Object.keys(this.model.articles).length < 2) {
+            console.log("Phase 1: resorting to plain search");
+            const transaction = new ApiTransaction(this.onPhase1Complete.bind(this));
+            new ApiCall_Search(transaction, this.model, this.title, ApiCall_Search.modes.PLAIN).run();
+            this.gui.setError("Note: there is no Wikipedia article with this name. Results might be underwhelming or missing.");
+        } else {
+            this.onPhase1Complete();
         }
+    }
 
+    onPhase1Complete() {
         console.log("Phase 1 done");
         this.gui.setStatus("Phase 2 of 3");
         console.log(this.model.articles[this.title]);
