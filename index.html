@@ -39,9 +39,20 @@ function onProcessBegin() {
     $("#wait_anim").show();
 }
 
-function onProcessEnd() {
+function onProcessEnd(svg) {
     $("#progress_div").html("");
+    $("#output_div").html(svg);
     $("#wait_anim").hide();
+
+    const thisObj = this;
+    $('text').click(function() {
+        const item = $(this);
+        const href = item.parent().attr('xlink:href');
+        const title = item.text();
+        $('#pagetitle').val(title);
+        onGoClick();
+        return false;
+    });
 }
 
 function setStatus(str) {

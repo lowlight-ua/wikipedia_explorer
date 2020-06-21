@@ -51,7 +51,6 @@ class Explorer
 
     onCategoryTreeBuilt() {
         console.log("Phase 3 done");     
-        this.guiCallbacks.onProcessEnd();
         console.debug(this.model);
 
         // Rank articles
@@ -71,18 +70,6 @@ class Explorer
         const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
         const dot = generateDot(this.model, this.title, relevant, maxScore);
         var svg = Viz(dot, "svg");
-        $("#output_div").html(svg);
-        $("#wait_anim").hide(); 
-
-        const thisObj = this;
-        $('text').click(function() {
-            const item = $(this);
-            const href = item.parent().attr('xlink:href');
-            const title = item.text();
-            $('#pagetitle').val(title);
-            onGoClick();
-            return false;
-        });
-
+        this.guiCallbacks.onProcessEnd(svg);
     }
 }
