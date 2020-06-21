@@ -22,10 +22,10 @@ class ApiTransaction {
         if (this.steps == 0) { this.onComplete(); }
     }
 
-    abort(msg) {
+    abort(err) {
     	this.aborted = true;
     	this.steps = 0;
-        this.onComplete(msg);
+        this.onComplete(err);
     }
 }
 

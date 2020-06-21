@@ -31,7 +31,7 @@ class Explorer
     onArticlesGathered(error) {
         if (error) {
             this.gui.onProcessEnd("");
-            this.gui.setStatus(error);
+            this.gui.setError(error);
             return;
         }
 
@@ -78,4 +78,8 @@ class Explorer
         var svg = Viz(dot, "svg");
         this.gui.onProcessEnd(svg);
     }
+}
+
+Explorer.error = {
+    NO_ARTICLE: "This article does not exist."
 }

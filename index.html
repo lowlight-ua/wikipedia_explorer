@@ -27,7 +27,8 @@ function onGoClick() {
     let guiCallbacks = {
         onProcessBegin, 
         onProcessEnd,
-        setStatus
+        setStatus,
+        setError
     };
     expl = new Explorer(guiCallbacks);
     expl.run(thePage);
@@ -37,6 +38,7 @@ function onProcessBegin() {
     $("#progress_div").html("");
     $("#output_div").html("");
     $("#wait_anim").show();
+    $("#error_div").html("");
 }
 
 function onProcessEnd(svg) {
@@ -57,6 +59,10 @@ function onProcessEnd(svg) {
 
 function setStatus(str) {
     $("#progress_div").html(str);
+}
+
+function setError(str) {
+    $("#error_div").html(str);
 }
 
 $(document).ready(function() {   
@@ -100,6 +106,7 @@ Enter a title of an english Wikipedia article. Click "Explore" to see a graph of
 <img id="wait_anim" src="https://i.stack.imgur.com/FhHRx.gif"> 
 
 <pre id="progress_div"></pre>
+<div id="error_div" class="ui-widget" style="color: red;" ></div>
 <div id="output_div"></div>
 
 </body>
