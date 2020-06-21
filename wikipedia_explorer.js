@@ -6,16 +6,16 @@ let expl = {};
 
 class Explorer 
 {
-    guiCallbacks;
+    gui;
 
-    constructor(guiCallbacks) {
+    constructor(gui) {
         this.model = new Model();
-        this.guiCallbacks = guiCallbacks;
+        this.gui = gui;
     }
 
     run(title) {
-        this.guiCallbacks.onProcessBegin();
-        this.guiCallbacks.setStatus("Phase 1 of 3");
+        this.gui.onProcessBegin();
+        this.gui.setStatus("Phase 1 of 3");
 
         // Title of the focused article, i.e. the article that is entered into the text box.
         this.title = title;
@@ -30,7 +30,7 @@ class Explorer
 
     onArticlesGathered() {
         console.log("Phase 1 done");
-        this.guiCallbacks.setStatus("Phase 2 of 3");
+        this.gui.setStatus("Phase 2 of 3");
         console.log(this.model.articles[this.title]);
         console.debug(this.model);
         // Phase 2: gather information about newly discovered articles and categories.
@@ -41,7 +41,7 @@ class Explorer
 
     onCategoriesAssigned() {
         console.log("Phase 2 done");     
-        this.guiCallbacks.setStatus("Phase 3 of 3");
+        this.gui.setStatus("Phase 3 of 3");
         console.debug(this.model);
 
         const thisObj = this;
@@ -70,6 +70,6 @@ class Explorer
         const maxScore = Math.max.apply(Math, Object.keys(relevantByScore));
         const dot = generateDot(this.model, this.title, relevant, maxScore);
         var svg = Viz(dot, "svg");
-        this.guiCallbacks.onProcessEnd(svg);
+        this.gui.onProcessEnd(svg);
     }
 }
