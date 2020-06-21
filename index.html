@@ -24,14 +24,33 @@ function onGoClick() {
         return;
     }
 
-    expl = new Explorer();
+    let guiCallbacks = {
+        onProcessBegin, 
+        onProcessEnd,
+        setStatus
+    };
+    expl = new Explorer(guiCallbacks);
     expl.run(thePage);
+}
+
+function onProcessBegin() {
+    $("#progress_div").html("");
+    $("#output_div").html("");
+    $("#wait_anim").show();
+}
+
+function onProcessEnd() {
+    $("#progress_div").html("");
+    $("#wait_anim").hide();
+}
+
+function setStatus(str) {
+    $("#progress_div").html(str);
 }
 
 $(document).ready(function() {   
     $("#wait_anim").hide(); 
     $("#gobutton").click(onGoClick);
-
 
     $("#pagetitle").autocomplete({
         source: function(request, response) {

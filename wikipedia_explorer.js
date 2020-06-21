@@ -6,14 +6,16 @@ let expl = {};
 
 class Explorer 
 {
-    constructor() {
+    guiCallbacks;
+
+    constructor(guiCallbacks) {
         this.model = new Model();
+        this.guiCallbacks = guiCallbacks;
     }
 
     run(title) {
-        $("#output_div").html("");
-        $("#progress_div").html("Phase 1 of 3");
-        $("#wait_anim").show();
+        this.guiCallbacks.onProcessBegin();
+        this.guiCallbacks.setStatus("Phase 1 of 3");
 
         // Title of the focused article, i.e. the article that is entered into the text box.
         this.title = title;
@@ -28,7 +30,7 @@ class Explorer
 
     onArticlesGathered() {
         console.log("Phase 1 done");
-        $("#progress_div").html("Phase 2 of 3");
+        this.guiCallbacks.setStatus("Phase 2 of 3");
         console.log(this.model.articles[this.title]);
         console.debug(this.model);
         // Phase 2: gather information about newly discovered articles and categories.
@@ -39,7 +41,7 @@ class Explorer
 
     onCategoriesAssigned() {
         console.log("Phase 2 done");     
-        $("#progress_div").html("Phase 3 of 3");
+        this.guiCallbacks.setStatus("Phase 3 of 3");
         console.debug(this.model);
 
         const thisObj = this;
@@ -49,7 +51,7 @@ class Explorer
 
     onCategoryTreeBuilt() {
         console.log("Phase 3 done");     
-        $("#progress_div").html("");
+        this.guiCallbacks.onProcessEnd();
         console.debug(this.model);
 
         // Rank articles
