@@ -6,9 +6,15 @@ The Wikipedia explorer tool automatically creates a map of relevant concepts, wh
 
 The tool can be used when researching a topic, deepening the knowledge of something you already have, or going down rabbit holes.
 
+Example:
+
+![](./doc/sample_graph.png)
+
 # How it works
 
 The tool works in a browser and does not have a back-end. It uses [Wikimedia API](https://www.mediawiki.org/wiki/API:Main_page) of the [English Wikipedia](https://en.wikipedia.org/). When given a Wikipedia article name, it makes a series of API calls to discover relevant articles, associated categories, and various attributes thereof. After ranking the articles and categories, it discards less relevant ones, and builds a knowledge graph using the [Graphviz](https://graphviz.org/) engine.
+
+A related article appears multiple times in the graph, because articles are attached to every category they pertain to.
 
 # Implementation notes
 
