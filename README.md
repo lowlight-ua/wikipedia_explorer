@@ -1,4 +1,4 @@
-# [See it in action](./src/index.html)
+# [See it in action](https://lowlight-ua.github.io/wikipedia_explorer/src/index.html)
 
 # Introduction
 
